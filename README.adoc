@@ -23,7 +23,7 @@ image::Screenshot-Calculation.png[]
 == How to use it
 
 * Checkout
-* start in dev mode (e.g. in the console: ./gradelw quarkusDev)
+* start in dev mode (e.g. in the console in *nix systems: ./gradlew quarkusDev)
 * click on the printed link(by default it should be http://localhost:8080)
 * have fun ;)
 
