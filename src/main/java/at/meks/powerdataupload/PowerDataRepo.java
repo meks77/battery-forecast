@@ -25,12 +25,6 @@ public class PowerDataRepo {
                        .toList();
     }
 
-    public List<PowerData> asList() {
-        return dataList.stream()
-                       .sorted(Comparator.comparing(PowerData::timestamp))
-                       .toList();
-    }
-
     public Collection<Integer> years() {
         return dataList.stream()
                        .map(powerData -> powerData.timestamp().getYear())

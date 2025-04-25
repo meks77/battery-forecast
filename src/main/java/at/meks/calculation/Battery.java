@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class Battery {
 
-    private static Logger logger = LoggerFactory.getLogger(Battery.class);
+    private static final Logger logger = LoggerFactory.getLogger(Battery.class);
 
     private final double maxBatteryCapacityKwh;
     private final int lifetimeCycles;
@@ -21,8 +21,8 @@ public class Battery {
     private double usedKwh;
     private double fedInKwh;
 
-    private Map<Month, Double> consumptionFromGrid = new HashMap<>();
-    private Map<Month, Double> fedInToGrid = new HashMap<>();
+    private final Map<Month, Double> consumptionFromGrid = new HashMap<>();
+    private final Map<Month, Double> fedInToGrid = new HashMap<>();
 
     public Battery(double maxBatteryCapacityKwh, int lifetimeCycles, Collection<PowerData> powerData) {
         this.maxBatteryCapacityKwh = maxBatteryCapacityKwh;

@@ -14,8 +14,6 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.time.LocalDate;
-import java.util.Comparator;
 
 @Path("/upload")
 public class PowerDataResource {
@@ -32,7 +30,6 @@ public class PowerDataResource {
             parser.stream().forEach(powerDataRepo::add);
         }
 
-        Integer year = powerDataRepo.years().stream().max(Comparator.naturalOrder()).orElse(LocalDate.now().getYear());
         return RestResponse.seeOther(uriInfo.getBaseUriBuilder().path("/index.html").build());
     }
 }
