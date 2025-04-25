@@ -1,0 +1,272 @@
+{@at.meks.calculation.UserInput userInput}
+{@at.meks.calculation.Forecast forecast}
+{@at.meks.calculation.OriginalPowerDataAggregation originalPowerDataAggregation}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Battery return of investment</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function onChange() {
+            document.getElementById('calculationForm').submit();
+        }
+    </script>
+</head>
+<body>
+<div class="w3-container w3-margin-bottom">
+    <div class="w3-card-4" style="width:100%;">
+        <header class="w3-container w3-blue">
+            <h2>Input</h2>
+        </header>
+        <div class="w3-container">
+            <form class="w3-container" action="/calculate" id="calculationForm" method="get">
+
+                <p>
+                    <input class="w3-input" type="text" id="price" name="price" value="{userInput.pricePerKwh}" onchange="onChange()"/>
+                    <label class="w3-text" for="price">Price kwh from Grid</label>
+                </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="capacity" name="capacity"
+                           value="{userInput.batteryCapacity}" onchange="onChange()"/>
+                    <label class="w3-text" for="capacity">Usable Battery Capacity</label>
+                </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="cycles" name="cycles" value="{userInput.batteryCycles}" onchange="onChange()"/>
+                    <label class="w3-text" for="cycles">Battery Life Cycles</label>
+                </p>
+
+                <p>
+                    <select class="w3-select" name="year" id="year" onchange="onChange()">
+                        <option value="" disabled>Choose your option</option>
+                        {#for year in originalPowerDataAggregation.years}
+                            <option value="{year}" {#if year == userInput.year}selected{/if}>{year}</option>
+                        {/for}
+                    </select>
+                    <label class="w3-text" for="year">Year</label>
+                </p>
+                <p>
+                    <input class="w3-btn w3-blue" type="submit" value="Calculate"/>
+                    <input class="w3-btn w3-blue" type="button" value="Upload Power Data" onclick="window.location.href='/index.html'"/>
+                </p>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="w3-container w3-margin-bottom">
+    <div class="w3-card-4" style="width:100%;">
+        <header class="w3-container w3-blue"><h2>Forecast</h2></header>
+        <div class="w3-container">
+            <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Saved money/year:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerYear)}</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Saved money/lifetime:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerLifetime)}</div>
+                </div>
+            </div>
+
+
+            <div class="w3-cell-row">
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Used kwh from Battery:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.usedKwh)}</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Battery cycles:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.batteryCycles)}</div>
+                </div>
+            </div>
+
+            <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Battery lifetime left %:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.batteryLifetimeLeftPercent)}</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Estimated battery lifetime years:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.estimatedLifetimeYears)}</div>
+                </div>
+            </div>
+
+            <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Battery Power End of Year:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.remainingBatteryPower)}</div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="w3-container w3-margin-bottom">
+    <div class="w3-card-4" style="width:100%;">
+        <header class="w3-container w3-blue"><h2>Comparison Table</h2></header>
+        <div class="w3-container">
+            <div class="w3-cell-row">
+                <div class="w3-cell w3-third">
+                    &nbsp;
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">Without Battery</div>
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">With Battery</div>
+                </div>
+            </div>
+            <div class="w3-cell-row">
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">Fed-in kwh to Grid:</div>
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">{str:fmt("%.2f", originalPowerDataAggregation.fedInOfYear())}</div>
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.fedInKwh)}</div>
+                </div>
+            </div>
+            <div class="w3-cell-row">
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">Used kwh from Grid:</div>
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">{str:fmt("%.2f", originalPowerDataAggregation.consumptionOfYear())}</div>
+                </div>
+                <div class="w3-cell w3-third">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.consumptionKwh)}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="w3-container w3-margin-bottom">
+    <div class="w3-card-4" style="width:100%;">
+        <header class="w3-container w3-blue"><h2>Comparison Fed-In/Consumption Chart</h2></header>
+        <div class="w3-container">
+            <div class="w3-cell-row">
+                <div class="w3-cell w3-half">
+                    <canvas id="fedInChart"></canvas>
+                </div>
+                <div class="w3-cell w3-half">
+                    <canvas id="consumptionChart"></canvas>
+                </div>
+
+                <script>
+                    const consumptionCtx = document.getElementById('consumptionChart');
+                    new Chart(consumptionCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan',
+                                'Feb',
+                                'March',
+                                'April',
+                                'May',
+                                'June',
+                                'July',
+                                'August',
+                                'September',
+                                'October',
+                                'November',
+                                'December'],
+                            datasets: [{
+                                label: 'without Battery',
+                                data: [{originalPowerDataAggregation.consumptionPerMonthAsString()}],
+                                borderWidth: 1
+                            },
+                                {
+                                    label: 'with Battery',
+                                    data: [{forecast.consumptionFromGridPerMonthAsString()}],
+                                    borderWidth: 1
+                                }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Consumption Comparison'
+                                }
+                            }
+                        }
+                    });
+                    const fedInCtx = document.getElementById('fedInChart');
+                    new Chart(fedInCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Jan',
+                                'Feb',
+                                'March',
+                                'April',
+                                'May',
+                                'June',
+                                'July',
+                                'August',
+                                'September',
+                                'October',
+                                'November',
+                                'December'],
+                            datasets: [{
+                                label: 'without Battery',
+                                data: [{originalPowerDataAggregation.fedInPerMonthAsString()}],
+                                borderWidth: 1
+                            },
+                                {
+                                    label: 'with Battery',
+                                    data: [{forecast.fedInPerMonthAsString()}],
+                                    borderWidth: 1
+                                }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Fed-In Comparison'
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

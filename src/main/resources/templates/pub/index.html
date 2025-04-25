@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Battery return of investment</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+</head>
+<body>
+<div class="w3-container">
+    <div class="w3-card-4" style="width:80%;">
+
+        <header class="w3-container w3-blue">
+            <h2>Header</h2>
+        </header>
+        <div class="w3-container">
+            <form class="w3-container" action="/upload" method="post" enctype="multipart/form-data">
+
+                <p>
+                    <input class="w3-input" type="file" id="consumptionFile" name="consumptionFile"/>
+                    <label class="w3-text" for="cycles">File with consumption Data</label>
+                </p>
+                <p>
+                    <input class="w3-input" type="file" id="fedInFile" name="fedInFile"/>
+                    <label class="w3-text" for="cycles">File with fed-in Data</label>
+                </p>
+                <p>
+                    <input class="w3-btn w3-blue" type="submit" value="Upload Files"/>
+                    <input class="w3-btn w3-blue" type="button" value="Start Calculation" onclick="window.location.href='/calculate'"/>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
