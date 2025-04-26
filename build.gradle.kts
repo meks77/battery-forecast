@@ -21,6 +21,7 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 group = "at.meks"

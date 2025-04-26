@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 class PowerFileParser {
@@ -46,28 +47,66 @@ class PowerFileParser {
         fedInIterator.next();
         consumptionIterator.next();
 
-        CSVRecord currentFedInRecord = fedInIterator.next();
-        CSVRecord currentConsumptionRecord = consumptionIterator.next();
+        Optional<CSVRecord> currentFedInRecord = Optional.of(fedInIterator.next());
+        Optional<CSVRecord> currentConsumptionRecord = Optional.of(consumptionIterator.next());
 
         Collection<PowerData> powerData = new ArrayList<>();
-
-        do {
-            var currentFedInTimestamp = getTimestamp(currentFedInRecord);
-            var currentConsumptionTimestamp = getTimestamp(currentConsumptionRecord);
-            if (currentFedInTimestamp.equals(currentConsumptionTimestamp)) {
-                powerData.add(getPowerData(currentFedInRecord, currentConsumptionRecord));
-                currentFedInRecord = fedInIterator.next();
-                currentConsumptionRecord = consumptionIterator.next();
-            } else if (currentFedInTimestamp.isBefore(currentConsumptionTimestamp)) {
-                powerData.add(getPowerDataForFedInRecord(currentFedInRecord));
-                currentFedInRecord = fedInIterator.next();
+        while (currentFedInRecord.isPresent() || currentConsumptionRecord.isPresent()) {
+            var currentFedInTimestamp = currentFedInRecord.map(PowerFileParser::getTimestamp);
+            var currentConsumptionTimestamp = currentConsumptionRecord.map(PowerFileParser::getTimestamp);
+            if (currentFedInTimestamp.isPresent() && currentFedInTimestamp.equals(currentConsumptionTimestamp)) {
+                //noinspection OptionalGetWithoutIsPresent -> currentFedInTimestamp.equals in the if condition implicitly verifies if it is present
+                powerData.add(getPowerData(currentFedInRecord.get(), currentConsumptionRecord.get()));
+                currentFedInRecord = nextRecord(fedInIterator);
+                currentConsumptionRecord = nextRecord(consumptionIterator);
+            } else if (fedInIsBeforeConsumption(currentFedInTimestamp, currentConsumptionTimestamp) || onlyFedInIsAvailable(currentFedInRecord, currentConsumptionRecord)) {
+                //noinspection OptionalGetWithoutIsPresent -> it is verified in the if condition in the method call
+                powerData.add(getPowerDataForFedInRecord(currentFedInRecord.get()));
+                currentFedInRecord = nextRecord(fedInIterator);
+            } else if (consumptionIsBeforeFedIn(currentFedInTimestamp, currentConsumptionTimestamp) || onlyConsumptionIsAvailable(currentFedInRecord, currentConsumptionRecord)) {
+                //noinspection OptionalGetWithoutIsPresent -> it is verified in the if condition in the method call
+                powerData.add(getPowerDataForConsumptionRecord(currentConsumptionRecord.get()));
+                currentConsumptionRecord = nextRecord(consumptionIterator);
             } else {
-                powerData.add(getPowerDataForConsumptionRecord(currentConsumptionRecord));
-                currentConsumptionRecord = consumptionIterator.next();
+                throw new IllegalStateException("this is a bug. An unexpected Situation happened");
             }
-        } while (fedInIterator.hasNext() || consumptionIterator.hasNext());
+        }
 
         return powerData.stream();
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private boolean onlyFedInIsAvailable(Optional<CSVRecord> currentFedInRecord,
+                                         Optional<CSVRecord> currentConsumptionRecord) {
+        return currentFedInRecord.isPresent() && currentConsumptionRecord.isEmpty();
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static boolean onlyConsumptionIsAvailable(Optional<CSVRecord> currentFedInRecord,
+                                      Optional<CSVRecord> currentConsumptionRecord) {
+        return currentFedInRecord.isEmpty() && currentConsumptionRecord.isPresent();
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static boolean consumptionIsBeforeFedIn(Optional<LocalDateTime> currentFedInTimestamp,
+                                      Optional<LocalDateTime> currentConsumptionTimestamp) {
+        return currentFedInTimestamp.isPresent() && currentConsumptionTimestamp.isPresent()
+                && currentFedInTimestamp.get().isAfter(currentConsumptionTimestamp.get());
+    }
+
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private static boolean fedInIsBeforeConsumption(Optional<LocalDateTime> currentFedInTimestamp,
+                                      Optional<LocalDateTime> currentConsumptionTimestamp) {
+        return currentFedInTimestamp.isPresent() && currentConsumptionTimestamp.isPresent()
+                && currentFedInTimestamp.get().isBefore(currentConsumptionTimestamp.get());
+    }
+
+    private static Optional<CSVRecord> nextRecord(Iterator<CSVRecord> iterator) {
+        if (iterator.hasNext()) {
+            return Optional.of(iterator.next());
+        } else {
+            return Optional.empty();
+        }
     }
 
     private static PowerData getPowerData(CSVRecord fedInRecord, CSVRecord consumptionRecord) {
