@@ -1,6 +1,5 @@
 package at.meks.calculation;
 
-import at.meks.powerdataupload.PowerDataRepo;
 import io.quarkus.qute.Location;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;

@@ -33,8 +33,8 @@ public class Battery {
     }
 
     private void add(PowerData powerData) {
-        consume(powerData.timestamp(), powerData.consumptionKwh());
-        save(powerData.timestamp(), powerData.fedInKwh());
+        consume(powerData.timestampUntil(), powerData.consumptionKwh());
+        save(powerData.timestampUntil(), powerData.fedInKwh());
     }
 
     private void consume(LocalDateTime timestamp, double kwh) {

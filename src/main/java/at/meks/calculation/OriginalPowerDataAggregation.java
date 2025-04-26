@@ -25,11 +25,11 @@ public class OriginalPowerDataAggregation {
     }
 
     private void calculatePowerStatistics(PowerData powerData) {
-        consumptionFromGrid.compute(powerData.timestamp().getMonth(),
+        consumptionFromGrid.compute(powerData.timestampUntil().getMonth(),
                                     (month, currentConsumption) ->
                                             currentConsumption == null ? powerData.consumptionKwh() :
                                                     currentConsumption + powerData.consumptionKwh());
-        fedInToGrid.compute(powerData.timestamp().getMonth(),
+        fedInToGrid.compute(powerData.timestampUntil().getMonth(),
                             (month, currentValue) ->
                                     currentValue == null ? powerData.fedInKwh() : currentValue + powerData.fedInKwh());
     }

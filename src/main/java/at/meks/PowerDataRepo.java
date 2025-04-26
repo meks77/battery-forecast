@@ -1,6 +1,5 @@
-package at.meks.powerdataupload;
+package at.meks;
 
-import at.meks.PowerData;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Collection;
@@ -12,7 +11,7 @@ import java.util.Set;
 @ApplicationScoped
 public class PowerDataRepo {
 
-    Set<PowerData> dataList = new HashSet<>();
+    private final Set<PowerData> dataList = new HashSet<>();
 
     public void add(PowerData powerData) {
         dataList.add(powerData);
@@ -20,14 +19,14 @@ public class PowerDataRepo {
 
     public List<PowerData> asList(int year) {
         return dataList.stream()
-                       .filter(powerData -> powerData.timestamp().getYear() == year)
-                       .sorted(Comparator.comparing(PowerData::timestamp))
+                       .filter(powerData -> powerData.timestampUntil().minusSeconds(1).getYear() == year)
+                       .sorted(Comparator.comparing(PowerData::timestampUntil))
                        .toList();
     }
 
     public Collection<Integer> years() {
         return dataList.stream()
-                       .map(powerData -> powerData.timestamp().getYear())
+                       .map(powerData -> powerData.timestampUntil().minusSeconds(1).getYear())
                        .distinct()
                        .toList();
     }

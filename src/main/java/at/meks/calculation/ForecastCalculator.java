@@ -1,7 +1,7 @@
 package at.meks.calculation;
 
 import at.meks.PowerData;
-import at.meks.powerdataupload.PowerDataRepo;
+import at.meks.PowerDataRepo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 

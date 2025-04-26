@@ -1,5 +1,6 @@
 package at.meks.powerdataupload;
 
+import at.meks.PowerDataRepo;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;

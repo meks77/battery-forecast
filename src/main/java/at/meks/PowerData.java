@@ -2,6 +2,15 @@ package at.meks;
 
 import java.time.LocalDateTime;
 
-public record PowerData(LocalDateTime timestamp, double fedInKwh, double consumptionKwh) {
+/**
+ * This record contains the power data, until to the timestamp.
+ * E.g. the timestamp is 1.1.2025 00:15 means, that it contains the power data, of the time
+ * between 1.1.2025 00:00:00 and 1.1.2025 00:14:59 inclusive
+ *
+ * @param timestampUntil timestamp until exclusive, of the power data
+ * @param fedInKwh the power which was delivered TO the grid
+ * @param consumptionKwh the power which was consumed FROM the grid
+ */
+public record PowerData(LocalDateTime timestampUntil, double fedInKwh, double consumptionKwh) {
 
 }
