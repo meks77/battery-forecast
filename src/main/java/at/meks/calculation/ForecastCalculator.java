@@ -1,37 +1,37 @@
 package at.meks.calculation;
 
-import at.meks.PowerData;
-import at.meks.PowerDataRepo;
+import at.meks.powerdata.PowerData;
+import at.meks.powerdata.PowerDataRepo;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.Year;
 
 @ApplicationScoped
 class ForecastCalculator {
 
     @Inject PowerDataRepo powerDataRepo;
 
-    Result calculateForecast(String price, String capacity, String cycles, int year) {
+    Result calculateForecast(String price, String capacity, String cycles, Year year) {
         Result calculationResult;
-        List<PowerData> powerData = powerDataRepo.asList(year);
+        PowerData powerData = powerDataRepo.powerData(year);
         var originalPowerdataAggregation = new OriginalPowerDataAggregation(powerData, powerDataRepo.years());
         if (price == null || capacity == null || cycles == null) {
-            calculationResult = new Result(new Forecast(new Battery(5.0, 6000, powerData), 0.30),
+            calculationResult = new Result(new Forecast(0.30, year,
+                                                        5.0, 6000, powerData) ,
                                            originalPowerdataAggregation,
                                            new UserInput(0.30, 5.0, 6000, LocalDate.now().getYear()));
         } else {
             double inputPrice = Double.parseDouble(price);
             double inputCapacity = Double.parseDouble(capacity);
             int inputCycles = Integer.parseInt(cycles);
-            var battery = new Battery(inputCapacity, inputCycles, powerData);
 
-            Forecast forecast = new Forecast(battery, inputPrice);
+            Forecast forecast = new Forecast(inputPrice, year, inputCapacity, inputCycles, powerData);
             UserInput userInput = new UserInput(inputPrice,
                                                 inputCapacity,
                                                 inputCycles,
-                                                year);
+                                                year.getValue());
             calculationResult = new Result(forecast, originalPowerdataAggregation, userInput);
         }
         return calculationResult;

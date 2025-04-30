@@ -1,4 +1,4 @@
-package at.meks;
+package at.meks.powerdata;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
  * @param fedInKwh the power which was delivered TO the grid
  * @param consumptionKwh the power which was consumed FROM the grid
  */
-public record PowerData(LocalDateTime timestampUntil, double fedInKwh, double consumptionKwh) {
+public record SinglePowerData(LocalDateTime timestampUntil, double fedInKwh, double consumptionKwh) {
 
 }

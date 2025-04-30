@@ -1,6 +1,6 @@
 package at.meks.powerdataupload;
 
-import at.meks.PowerData;
+import at.meks.powerdata.SinglePowerData;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -42,14 +42,14 @@ class PowerFileParser {
                                               .parse(consumptionReader);
     }
 
-    Stream<PowerData> stream() {
+    Stream<SinglePowerData> stream() {
         Iterator<CSVRecord> fedInIterator = fedInRecords.iterator();
         Iterator<CSVRecord> consumptionIterator = consumptionRecords.iterator();
 
         Optional<CSVRecord> currentFedInRecord = Optional.of(fedInIterator.next());
         Optional<CSVRecord> currentConsumptionRecord = Optional.of(consumptionIterator.next());
 
-        Collection<PowerData> powerData = new ArrayList<>();
+        Collection<SinglePowerData> powerData = new ArrayList<>();
         while (currentFedInRecord.isPresent() || currentConsumptionRecord.isPresent()) {
             var currentFedInTimestamp = currentFedInRecord.map(PowerFileParser::getTimestamp);
             var currentConsumptionTimestamp = currentConsumptionRecord.map(PowerFileParser::getTimestamp);
@@ -110,7 +110,7 @@ class PowerFileParser {
         }
     }
 
-    private static PowerData getPowerData(CSVRecord fedInRecord, CSVRecord consumptionRecord) {
+    private static SinglePowerData getPowerData(CSVRecord fedInRecord, CSVRecord consumptionRecord) {
         String fedInTimestamp = fedInRecord.get(TIMESTAMP);
         String consumptionTimestamp = consumptionRecord.get(TIMESTAMP);
         if (!fedInTimestamp.equals(consumptionTimestamp)) {
@@ -118,21 +118,21 @@ class PowerFileParser {
                     "Fed-In timestamp '" + fedInTimestamp + "' and consumption timestamp '" + consumptionTimestamp
                             + "' don't match");
         }
-        return new PowerData(getTimestamp(fedInRecord),
-                             getPowerKwh(fedInRecord),
-                             getPowerKwh(consumptionRecord));
+        return new SinglePowerData(getTimestamp(fedInRecord),
+                                   getPowerKwh(fedInRecord),
+                                   getPowerKwh(consumptionRecord));
     }
 
-    private static PowerData getPowerDataForFedInRecord(CSVRecord fedInRecord) {
-        return new PowerData(getTimestamp(fedInRecord),
-                             getPowerKwh(fedInRecord),
-                             0.0);
+    private static SinglePowerData getPowerDataForFedInRecord(CSVRecord fedInRecord) {
+        return new SinglePowerData(getTimestamp(fedInRecord),
+                                   getPowerKwh(fedInRecord),
+                                   0.0);
     }
 
-    private static PowerData getPowerDataForConsumptionRecord(CSVRecord consumptionRecord) {
-        return new PowerData(getTimestamp(consumptionRecord),
-                             0.0,
-                             getPowerKwh(consumptionRecord));
+    private static SinglePowerData getPowerDataForConsumptionRecord(CSVRecord consumptionRecord) {
+        return new SinglePowerData(getTimestamp(consumptionRecord),
+                                   0.0,
+                                   getPowerKwh(consumptionRecord));
     }
 
     private static double getPowerKwh(CSVRecord record) {

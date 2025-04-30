@@ -10,6 +10,8 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.jboss.resteasy.reactive.RestQuery;
 
+import java.time.Year;
+
 @Path("/calculate")
 public class BatteryForecastCalculatorResource {
 
@@ -20,7 +22,7 @@ public class BatteryForecastCalculatorResource {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public TemplateInstance calculate(@RestQuery String price, @RestQuery String capacity, @RestQuery String cycles, @RestQuery int year) {
-        var calculationResult = forecastCalculator.calculateForecast(price, capacity, cycles, year);
+        var calculationResult = forecastCalculator.calculateForecast(price, capacity, cycles, Year.of(year));
         return forecastResult
                 .data("forecast", calculationResult.forecast())
                 .data("userInput", calculationResult.userInput())

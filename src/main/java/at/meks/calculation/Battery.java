@@ -1,13 +1,11 @@
 package at.meks.calculation;
 
-import at.meks.PowerData;
+import at.meks.powerdata.SinglePowerData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Arrays;
-import java.util.Collection;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,26 +13,23 @@ public class Battery {
 
     private static final Logger logger = LoggerFactory.getLogger(Battery.class);
 
-    private final double maxBatteryCapacityKwh;
+    private final double batteryCapacityKwh;
     private final int lifetimeCycles;
     private double currentBatteryPower;
     private double usedKwh;
     private double fedInKwh;
 
-    private final Map<Month, Double> consumptionFromGrid = new HashMap<>();
-    private final Map<Month, Double> fedInToGrid = new HashMap<>();
+    private final Map<YearMonth, Double> consumptionFromGrid = new HashMap<>();
+    private final Map<YearMonth, Double> fedInToGrid = new HashMap<>();
 
-    public Battery(double maxBatteryCapacityKwh, int lifetimeCycles, Collection<PowerData> powerData) {
-        this.maxBatteryCapacityKwh = maxBatteryCapacityKwh;
+    public Battery(double batteryCapacityKwh, int lifetimeCycles) {
+        this.batteryCapacityKwh = batteryCapacityKwh;
         this.lifetimeCycles = lifetimeCycles;
-        Arrays.stream(Month.values()).forEach(month -> consumptionFromGrid.put(month, 0.0));
-        Arrays.stream(Month.values()).forEach(month -> fedInToGrid.put(month, 0.0));
-        powerData.forEach(this::add);
     }
 
-    private void add(PowerData powerData) {
-        consume(powerData.timestampUntil(), powerData.consumptionKwh());
-        save(powerData.timestampUntil(), powerData.fedInKwh());
+    public void add(SinglePowerData singlePowerData) {
+        consume(singlePowerData.timestampUntil(), singlePowerData.consumptionKwh());
+        save(singlePowerData.timestampUntil(), singlePowerData.fedInKwh());
     }
 
     private void consume(LocalDateTime timestamp, double kwh) {
@@ -42,12 +37,15 @@ public class Battery {
         currentBatteryPower -= removedPower;
         usedKwh += removedPower;
         double consumedFromGrid = kwh - removedPower;
-        consumptionFromGrid.compute(timestamp.getMonth(), (month, currentConsumption) -> currentConsumption == null ? consumedFromGrid : currentConsumption + consumedFromGrid);
+        consumptionFromGrid.compute(YearMonth.of(timestamp.getYear(), timestamp.getMonth()),
+                                    (month, currentConsumption) ->
+                                            currentConsumption == null ? consumedFromGrid :
+                                                    currentConsumption + consumedFromGrid);
         logger.debug("consumed kwh {}; currentCapacity: {}; usedKwh: {}", kwh, currentBatteryPower, usedKwh);
     }
 
     private void save(LocalDateTime timestamp, double kwh) {
-        double maxSavableKwh = maxBatteryCapacityKwh - currentBatteryPower;
+        double maxSavableKwh = batteryCapacityKwh - currentBatteryPower;
         double fedInKwh = 0.0;
         double savedKwh = kwh;
         if (kwh > maxSavableKwh) {
@@ -57,7 +55,9 @@ public class Battery {
         currentBatteryPower = currentBatteryPower + savedKwh;
         this.fedInKwh += fedInKwh;
         final double furtherFedInForMonth = fedInKwh;
-        fedInToGrid.compute(timestamp.getMonth(), (month, currentValue) -> currentValue == null ? furtherFedInForMonth : currentValue + furtherFedInForMonth);
+        fedInToGrid.compute(YearMonth.of(timestamp.getYear(), timestamp.getMonth()),
+                            (month, currentValue) ->
+                                    currentValue == null ? furtherFedInForMonth : currentValue + furtherFedInForMonth);
         logger.debug("saved kwh {}; currentCapacity: {}; usedKwh: {}", kwh, currentBatteryPower, usedKwh);
     }
 
@@ -66,29 +66,24 @@ public class Battery {
     }
 
     public double batteryCycles() {
-        return usedKwh / maxBatteryCapacityKwh;
+        return usedKwh / batteryCapacityKwh;
     }
 
     public double fedInKwh() {
         return fedInKwh;
     }
 
-    public double maxBatteryCapacityKwh() {
-        return maxBatteryCapacityKwh;
-    }
-
     public int lifetimeCycles() {
         return lifetimeCycles;
     }
 
-    public Map<Month, Double> consumptionFromGrid() {
+    public Map<YearMonth, Double> consumptionFromGrid() {
         return consumptionFromGrid;
     }
 
-    public Map<Month, Double> fedInToGrid() {
+    public Map<YearMonth, Double> fedInToGrid() {
         return fedInToGrid;
     }
-
 
     public double currentBatteryPower() {
         return currentBatteryPower;

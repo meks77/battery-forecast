@@ -1,6 +1,7 @@
 package at.meks.calculation;
 
-import at.meks.PowerData;
+import at.meks.powerdata.PowerData;
+import at.meks.powerdata.SinglePowerData;
 
 import java.time.Month;
 import java.util.Arrays;
@@ -17,21 +18,21 @@ public class OriginalPowerDataAggregation {
     private final Map<Month, Double> fedInToGrid = new HashMap<>();
     private final Collection<Integer> years;
 
-    public OriginalPowerDataAggregation(Collection<PowerData> powerData, Collection<Integer> years) {
+    public OriginalPowerDataAggregation(PowerData powerData, Collection<Integer> years) {
         this.years = years;
         Arrays.stream(Month.values()).forEach(month -> consumptionFromGrid.put(month, 0.0));
         Arrays.stream(Month.values()).forEach(month -> fedInToGrid.put(month, 0.0));
-        powerData.forEach(this::calculatePowerStatistics);
+        powerData.stream().forEach(this::calculatePowerStatistics);
     }
 
-    private void calculatePowerStatistics(PowerData powerData) {
-        consumptionFromGrid.compute(powerData.timestampUntil().getMonth(),
+    private void calculatePowerStatistics(SinglePowerData singlePowerData) {
+        consumptionFromGrid.compute(singlePowerData.timestampUntil().getMonth(),
                                     (month, currentConsumption) ->
-                                            currentConsumption == null ? powerData.consumptionKwh() :
-                                                    currentConsumption + powerData.consumptionKwh());
-        fedInToGrid.compute(powerData.timestampUntil().getMonth(),
+                                            currentConsumption == null ? singlePowerData.consumptionKwh() :
+                                                    currentConsumption + singlePowerData.consumptionKwh());
+        fedInToGrid.compute(singlePowerData.timestampUntil().getMonth(),
                             (month, currentValue) ->
-                                    currentValue == null ? powerData.fedInKwh() : currentValue + powerData.fedInKwh());
+                                    currentValue == null ? singlePowerData.fedInKwh() : currentValue + singlePowerData.fedInKwh());
     }
 
     public String consumptionPerMonthAsString() {

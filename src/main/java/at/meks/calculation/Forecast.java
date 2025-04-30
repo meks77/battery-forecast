@@ -1,56 +1,96 @@
 package at.meks.calculation;
 
+import at.meks.powerdata.PowerData;
+
+import java.time.Year;
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
-public record Forecast(double usedKwh, double fedInKwh,
-                       double batteryCycles,
-                       double batteryLifetimeLeftPercent, double estimatedLifetimeYears, double savedMoneyPerYear,
-                       double savedMoneyPerLifetime, double[] consumptionFromGridPerMonth, double[] fedInPerMonth,
-                       double remainingBatteryPower) {
+public final class Forecast {
 
-    public Forecast(Battery battery, double inputPrice) {
-        this(battery.usedKwh(),
-             battery.fedInKwh(),
-             battery.usedKwh() / battery.maxBatteryCapacityKwh(),
-             100.0 - 100.0 / battery.lifetimeCycles() * battery.batteryCycles(),
-             estimatedLifetime(battery),
-             inputPrice * battery.usedKwh(),
-             inputPrice * battery.fedInKwh() * estimatedLifetime(battery),
-             battery.consumptionFromGrid().entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .map(Map.Entry::getValue)
-                    .flatMapToDouble(DoubleStream::of)
-                    .toArray(),
-             battery.fedInToGrid().entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .map(Map.Entry::getValue)
-                    .flatMapToDouble(DoubleStream::of)
-                    .toArray(),
-             battery.currentBatteryPower());
-    }
+    private final Battery battery;
+    private final double inputPrice;
+    private final Year year;
 
-    private static double estimatedLifetime(Battery battery) {
-        return 100 / (100.0 / battery.lifetimeCycles() * battery.batteryCycles());
+    public Forecast(double inputPrice, Year year, double maxBatteryCapacityKwh, int batteryLifetimeCycles,
+                    PowerData powerData) {
+        this.battery = new Battery(maxBatteryCapacityKwh, batteryLifetimeCycles);
+        powerData.stream(year).forEach(battery::add);
+        this.inputPrice = inputPrice;
+        this.year = year;
     }
 
     public String consumptionFromGridPerMonthAsString() {
-        return DoubleStream.of(consumptionFromGridPerMonth)
+        return DoubleStream.of(consumptionFromGridPerMonth())
                            .boxed()
                            .map(String::valueOf)
                            .collect(Collectors.joining(", "));
     }
 
+    private double[] consumptionFromGridPerMonth() {
+        HashMap<YearMonth, Double> resultMap = new HashMap<>();
+        for (int i = 1; i <= 12; i++) {
+            resultMap.put(YearMonth.of(year.getValue(), i), 0.0);
+        }
+        battery.consumptionFromGrid().entrySet().stream()
+                .filter(entry -> entry.getKey().getYear() == this.year.getValue())
+                .forEach(entry -> resultMap.put(entry.getKey(), entry.getValue()));
+        return resultMap.entrySet().stream()
+                           .sorted(Map.Entry.comparingByKey())
+                           .map(Map.Entry::getValue)
+                           .flatMapToDouble(DoubleStream::of)
+                           .toArray();
+    }
+
+    public double consumptionKwh() {
+        return DoubleStream.of(consumptionFromGridPerMonth()).sum();
+    }
+
     public String fedInPerMonthAsString() {
-        return DoubleStream.of(fedInPerMonth)
+        return DoubleStream.of(battery.fedInToGrid().entrySet().stream()
+                                      .sorted(Map.Entry.comparingByKey())
+                                      .map(Map.Entry::getValue)
+                                      .flatMapToDouble(DoubleStream::of)
+                                      .toArray())
                            .boxed()
                            .map(value -> value * -1.0)
                            .map(String::valueOf)
                            .collect(Collectors.joining(", "));
     }
 
-    public double consumptionKwh() {
-        return DoubleStream.of(consumptionFromGridPerMonth).sum();
+    public double usedKwh() {
+        return battery.usedKwh();
     }
+
+    public double fedInKwh() {
+        return battery.fedInKwh();
+    }
+
+    public double batteryCycles() {
+        return battery.batteryCycles();
+    }
+
+    public double batteryLifetimeLeftPercent() {
+        return 100.0 - 100.0 / battery.lifetimeCycles() * battery.batteryCycles();
+    }
+
+    public double estimatedLifetimeYears() {
+        return 100 / (100.0 / battery.lifetimeCycles() * battery.batteryCycles());
+    }
+
+    public double savedMoneyPerYear() {
+        return inputPrice * battery.usedKwh();
+    }
+
+    public double savedMoneyPerLifetime() {
+        return inputPrice * battery.fedInKwh() * estimatedLifetimeYears();
+    }
+
+    public double remainingBatteryPower() {
+        return battery.currentBatteryPower();
+    }
+
 }
