@@ -20,6 +20,7 @@ dependencies {
     implementation("org.apache.commons:commons-csv:1.14.0")
     implementation("io.quarkus:quarkus-arc")
     testImplementation("io.quarkus:quarkus-junit5")
+    testImplementation("io.quarkus:quarkus-junit5-component")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.assertj:assertj-core:3.27.3")
 }
