@@ -15,9 +15,11 @@ public final class Forecast {
     private final double inputPrice;
     private final Year year;
     private final Inverter inverter;
+    private final FeedInTariffs feedInTariffs;
 
     public Forecast(double inputPrice, Year year, double maxBatteryCapacityKwh, int batteryLifetimeCycles,
-                    PowerData powerData) {
+                    PowerData powerData, FeedInTariffs feedInTariffs) {
+        this.feedInTariffs = feedInTariffs;
         this.battery = new Battery(maxBatteryCapacityKwh, batteryLifetimeCycles);
         inverter = new Inverter(battery);
 
@@ -84,7 +86,24 @@ public final class Forecast {
         return 100 / (100.0 / battery.lifetimeCycles() * battery.batteryCycles());
     }
 
+    public double lostFeedInMoney() {
+        return fedInKwhToEnergyPurchaseAgreementPartner() * feedInTariffs.feedInTariffGrid() +
+                fedInKwhToCommunity() * feedInTariffs.feedInTariffEnergyCommunity();
+    }
+
+    private double fedInKwhToEnergyPurchaseAgreementPartner() {
+        return battery.usedKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity());
+    }
+
+    private double fedInKwhToCommunity() {
+        return battery.usedKwh() * feedInTariffs.percentageAmountDeliveryToCommunity();
+    }
+
     public double savedMoneyPerYear() {
+        return savedMoneyBecauseOfSavedPower() - lostFeedInMoney();
+    }
+
+    public double savedMoneyBecauseOfSavedPower() {
         return inputPrice * battery.usedKwh();
     }
 

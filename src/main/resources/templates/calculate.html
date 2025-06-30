@@ -35,11 +35,6 @@
                 </p>
 
                 <p>
-                    <input class="w3-input" type="text" id="cycles" name="cycles" value="{userInput.batteryCycles}" onchange="onChange()"/>
-                    <label class="w3-text" for="cycles">Battery Life Cycles</label>
-                </p>
-
-                <p>
                     <select class="w3-select" name="year" id="year" onchange="onChange()">
                         <option value="" disabled>Choose your option</option>
                         {#for year in originalPowerDataAggregation.years}
@@ -48,6 +43,27 @@
                     </select>
                     <label class="w3-text" for="year">Year</label>
                 </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="cycles" name="cycles" value="{userInput.batteryCycles}" onchange="onChange()"/>
+                    <label class="w3-text" for="cycles">Battery Life Cycles</label>
+                </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="cycles" name="feedInTariffGrid" value="{userInput.feedInTariffs.feedInTariffGrid}" onchange="onChange()"/>
+                    <label class="w3-text" for="cycles">Feed In Tariff To Grid</label>
+                </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="cycles" name="feedInTariffEnergyCommunity" value="{userInput.feedInTariffs.feedInTariffEnergyCommunity}" onchange="onChange()"/>
+                    <label class="w3-text" for="cycles">Feed In Tariff To Energy Community</label>
+                </p>
+
+                <p>
+                    <input class="w3-input" type="text" id="cycles" name="percentageAmountDeliveryToCommunity" value="{userInput.feedInTariffs.percentageAmountDeliveryToCommunity}" onchange="onChange()"/>
+                    <label class="w3-text" for="cycles">% delivery to Community</label>
+                </p>
+
                 <p>
                     <input class="w3-btn w3-blue" type="submit" value="Calculate"/>
                     <input class="w3-btn w3-blue" type="button" value="Upload Power Data" onclick="window.location.href='/index.html'"/>
@@ -65,36 +81,48 @@
             <div class="w3-cell-row">
 
                 <div class="w3-cell w3-quarter">
-                    <div class="w3-right-align">Saved money/year:</div>
+                    <div class="w3-right-align">Saved money because of stored power:</div>
                 </div>
                 <div class="w3-cell w3-quarter">
-                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerYear)}</div>
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyBecauseOfSavedPower)}</div>
                 </div>
-                <div class="w3-cell w3-quarter">
-                    <div class="w3-right-align">Saved money/lifetime:</div>
-                </div>
-                <div class="w3-cell w3-quarter">
-                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerLifetime)}</div>
-                </div>
-            </div>
 
-
-            <div class="w3-cell-row">
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">Used kwh from Battery:</div>
                 </div>
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">{str:fmt("%.2f", forecast.usedKwh)}</div>
                 </div>
+
+            </div>
+
+
+            <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Lost money not fed in:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">- {str:fmt("%.2f", forecast.lostFeedInMoney)}</div>
+                </div>
+
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">Battery cycles:</div>
                 </div>
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">{str:fmt("%.2f", forecast.batteryCycles)}</div>
                 </div>
+
+
             </div>
 
             <div class="w3-cell-row">
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Saved money/year:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerYear)}</div>
+                </div>
 
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">Battery lifetime left %:</div>
@@ -102,15 +130,36 @@
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">{str:fmt("%.2f", forecast.batteryLifetimeLeftPercent)}</div>
                 </div>
+
+            </div>
+
+            <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">Saved money/lifetime:</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">{str:fmt("%.2f", forecast.savedMoneyPerLifetime)}</div>
+                </div>
+
+
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">Estimated battery lifetime years:</div>
                 </div>
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">{str:fmt("%.2f", forecast.estimatedLifetimeYears)}</div>
                 </div>
+
             </div>
 
             <div class="w3-cell-row">
+
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">&nbsp;</div>
+                </div>
+                <div class="w3-cell w3-quarter">
+                    <div class="w3-right-align">&nbsp;</div>
+                </div>
 
                 <div class="w3-cell w3-quarter">
                     <div class="w3-right-align">Battery Power End of Year:</div>
