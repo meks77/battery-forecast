@@ -22,51 +22,64 @@
         </header>
         <div class="w3-container">
             <form class="w3-container" action="/calculate" id="calculationForm" method="get">
+                <div class="w3-container">
 
-                <p>
-                    <input class="w3-input" type="text" id="price" name="price" value="{userInput.pricePerKwh}" onchange="onChange()"/>
-                    <label class="w3-text" for="price">Price kwh from Grid</label>
-                </p>
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="price" name="price" value="{userInput.pricePerKwh}"
+                                   onchange="onChange()"/>
+                            <label class="w3-text" for="price">Price kwh from Grid</label>
+                        </div>
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="capacity" name="capacity"
+                                   value="{userInput.batteryCapacity}" onchange="onChange()"/>
+                            <label class="w3-text" for="capacity">Usable Battery Capacity</label>
+                        </div>
+                    </div>
 
-                <p>
-                    <input class="w3-input" type="text" id="capacity" name="capacity"
-                           value="{userInput.batteryCapacity}" onchange="onChange()"/>
-                    <label class="w3-text" for="capacity">Usable Battery Capacity</label>
-                </p>
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="cycles" name="feedInTariffGrid"
+                                   value="{userInput.feedInTariffs.feedInTariffGrid}" onchange="onChange()"/>
+                            <label class="w3-text" for="cycles">Feed In Tariff To Grid</label>
+                        </div>
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="cycles" name="cycles"
+                                   value="{userInput.batteryCycles}" onchange="onChange()"/>
+                            <label class="w3-text" for="cycles">Battery Life Cycles</label>
+                        </div>
+                    </div>
 
-                <p>
-                    <select class="w3-select" name="year" id="year" onchange="onChange()">
-                        <option value="" disabled>Choose your option</option>
-                        {#for year in originalPowerDataAggregation.years}
-                            <option value="{year}" {#if year == userInput.year}selected{/if}>{year}</option>
-                        {/for}
-                    </select>
-                    <label class="w3-text" for="year">Year</label>
-                </p>
-
-                <p>
-                    <input class="w3-input" type="text" id="cycles" name="cycles" value="{userInput.batteryCycles}" onchange="onChange()"/>
-                    <label class="w3-text" for="cycles">Battery Life Cycles</label>
-                </p>
-
-                <p>
-                    <input class="w3-input" type="text" id="cycles" name="feedInTariffGrid" value="{userInput.feedInTariffs.feedInTariffGrid}" onchange="onChange()"/>
-                    <label class="w3-text" for="cycles">Feed In Tariff To Grid</label>
-                </p>
-
-                <p>
-                    <input class="w3-input" type="text" id="cycles" name="feedInTariffEnergyCommunity" value="{userInput.feedInTariffs.feedInTariffEnergyCommunity}" onchange="onChange()"/>
-                    <label class="w3-text" for="cycles">Feed In Tariff To Energy Community</label>
-                </p>
-
-                <p>
-                    <input class="w3-input" type="text" id="cycles" name="percentageAmountDeliveryToCommunity" value="{userInput.feedInTariffs.percentageAmountDeliveryToCommunity}" onchange="onChange()"/>
-                    <label class="w3-text" for="cycles">% delivery to Community</label>
-                </p>
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="cycles" name="feedInTariffEnergyCommunity"
+                                   value="{userInput.feedInTariffs.feedInTariffEnergyCommunity}" onchange="onChange()"/>
+                            <label class="w3-text" for="cycles">Feed In Tariff To Energy Community</label>
+                        </div>
+                        <div class="w3-cell w3-half w3-padding">
+                            <select class="w3-select" name="year" id="year" onchange="onChange()">
+                                <option value="" disabled>Choose your option</option>
+                                {#for year in originalPowerDataAggregation.years}
+                                    <option value="{year}" {#if year == userInput.year}selected{/if}>{year}</option>
+                                {/for}
+                            </select>
+                            <label class="w3-text" for="year">Year</label>
+                        </div>
+                    </div>
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-half w3-padding">
+                            <input class="w3-input" type="text" id="cycles" name="percentageAmountDeliveryToCommunity"
+                                   value="{userInput.feedInTariffs.percentageAmountDeliveryToCommunity}"
+                                   onchange="onChange()"/>
+                            <label class="w3-text" for="cycles">% delivery to Community</label>
+                        </div>
+                    </div>
+                </div>
 
                 <p>
                     <input class="w3-btn w3-blue" type="submit" value="Calculate"/>
-                    <input class="w3-btn w3-blue" type="button" value="Upload Power Data" onclick="window.location.href='/index.html'"/>
+                    <input class="w3-btn w3-blue" type="button" value="Upload Power Data"
+                           onclick="window.location.href='/index.html'"/>
                 </p>
 
             </form>

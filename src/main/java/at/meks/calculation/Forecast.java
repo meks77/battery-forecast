@@ -108,7 +108,7 @@ public final class Forecast {
     }
 
     public double savedMoneyPerLifetime() {
-        return inputPrice * inverter.fedInKwh() * estimatedLifetimeYears();
+        return savedMoneyPerYear() * estimatedLifetimeYears();
     }
 
     public double remainingBatteryPower() {
