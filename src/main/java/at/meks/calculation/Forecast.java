@@ -14,11 +14,14 @@ public final class Forecast {
     private final Battery battery;
     private final double inputPrice;
     private final Year year;
+    private final Inverter inverter;
 
     public Forecast(double inputPrice, Year year, double maxBatteryCapacityKwh, int batteryLifetimeCycles,
                     PowerData powerData) {
         this.battery = new Battery(maxBatteryCapacityKwh, batteryLifetimeCycles);
-        powerData.stream(year).forEach(battery::add);
+        inverter = new Inverter(battery);
+
+        powerData.stream(year).forEach(inverter::add);
         this.inputPrice = inputPrice;
         this.year = year;
     }
@@ -35,7 +38,7 @@ public final class Forecast {
         for (int i = 1; i <= 12; i++) {
             resultMap.put(YearMonth.of(year.getValue(), i), 0.0);
         }
-        battery.consumptionFromGrid().entrySet().stream()
+        inverter.consumptionFromGrid().entrySet().stream()
                 .filter(entry -> entry.getKey().getYear() == this.year.getValue())
                 .forEach(entry -> resultMap.put(entry.getKey(), entry.getValue()));
         return resultMap.entrySet().stream()
@@ -50,7 +53,7 @@ public final class Forecast {
     }
 
     public String fedInPerMonthAsString() {
-        return DoubleStream.of(battery.fedInToGrid().entrySet().stream()
+        return DoubleStream.of(inverter.fedInToGrid().entrySet().stream()
                                       .sorted(Map.Entry.comparingByKey())
                                       .map(Map.Entry::getValue)
                                       .flatMapToDouble(DoubleStream::of)
@@ -66,7 +69,7 @@ public final class Forecast {
     }
 
     public double fedInKwh() {
-        return battery.fedInKwh();
+        return inverter.fedInKwh();
     }
 
     public double batteryCycles() {
@@ -86,7 +89,7 @@ public final class Forecast {
     }
 
     public double savedMoneyPerLifetime() {
-        return inputPrice * battery.fedInKwh() * estimatedLifetimeYears();
+        return inputPrice * inverter.fedInKwh() * estimatedLifetimeYears();
     }
 
     public double remainingBatteryPower() {
