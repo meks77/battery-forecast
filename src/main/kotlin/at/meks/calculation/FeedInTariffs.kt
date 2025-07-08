@@ -1,4 +1,4 @@
-package at.meks.calculation;
+package at.meks.calculation
 
 /**
  *
@@ -6,6 +6,6 @@ package at.meks.calculation;
  * @param feedInTariffEnergyCommunity the amount of money which is paid for fed in kwh by the energy community
  * @param percentageAmountDeliveryToCommunity     the percentage amount of energy delivered to the community. 0.2 = 20 %
  */
-public record FeedInTariffs(double feedInTariffGrid, double feedInTariffEnergyCommunity, double percentageAmountDeliveryToCommunity) {
+data class FeedInTariffs(val feedInTariffGrid: Double, val feedInTariffEnergyCommunity: Double, val percentageAmountDeliveryToCommunity: Double) {
 
 }

@@ -1,6 +1,7 @@
 plugins {
     java
     id("io.quarkus")
+    kotlin("jvm")
 }
 
 repositories {
@@ -14,6 +15,7 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkiverse.qute.web:quarkus-qute-web")
@@ -23,14 +25,13 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5-component")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.assertj:assertj-core:3.27.3")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 group = "at.meks"
 version = "1.0.0-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<Test> {
@@ -39,4 +40,7 @@ tasks.withType<Test> {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
+}
+kotlin {
+    jvmToolchain(21)
 }

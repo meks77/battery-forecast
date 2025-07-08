@@ -1,6 +1,6 @@
-package at.meks.powerdata;
+package at.meks.powerdata
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime
 
 /**
  * This record contains the power data, until to the timestamp.
@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
  * @param fedInKwh the power which was delivered TO the grid
  * @param consumptionKwh the power which was consumed FROM the grid
  */
-public record SinglePowerData(LocalDateTime timestampUntil, double fedInKwh, double consumptionKwh) {
+data class SinglePowerData(val timestampUntil: LocalDateTime, val fedInKwh: Double, val consumptionKwh: Double) {
 
 }
