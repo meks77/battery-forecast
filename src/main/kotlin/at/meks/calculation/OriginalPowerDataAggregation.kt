@@ -12,7 +12,7 @@ class OriginalPowerDataAggregation(val years: List<Int>) {
     constructor(powerData: PowerData, years: List<Int>) : this(years) {
         Month.entries.forEach { month -> consumptionFromGrid.put(month, 0.0) }
         Month.entries.forEach { month -> fedInToGrid.put(month, 0.0) }
-        powerData.stream().forEach(this::calculatePowerStatistics)
+        powerData.getPowerData().forEach(this::calculatePowerStatistics)
     }
 
     private fun calculatePowerStatistics(singlePowerData: SinglePowerData) {

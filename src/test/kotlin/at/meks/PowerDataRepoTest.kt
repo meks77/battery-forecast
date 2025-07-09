@@ -40,7 +40,7 @@ class PowerDataRepoTest {
             repo.add(SinglePowerData(LocalDateTime(2024, 1, 1, 0, 0, 0), 1.0, 0.0))
             repo.add(SinglePowerData(LocalDateTime(2024, 1, 1, 0, 1, 0), 1.0, 0.0))
 
-            val result = repo.powerData(Year(2023)).stream()
+            val result = repo.powerData(Year(2023)).getPowerData()
 
             assertThat(result).containsExactly(
                     SinglePowerData(LocalDateTime(2023, 1, 1, 0, 1), 1.0, 0.0),
