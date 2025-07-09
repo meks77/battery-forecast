@@ -15,6 +15,8 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.7.1")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
@@ -25,7 +27,6 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5-component")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("org.assertj:assertj-core:3.27.3")
-    implementation(kotlin("stdlib-jdk8"))
 }
 
 group = "at.meks"

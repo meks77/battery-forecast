@@ -1,8 +1,8 @@
 package at.meks.calculation
 
 import at.meks.powerdata.PowerData
-import java.time.Year
-import java.time.YearMonth
+import at.meks.Year
+import kotlinx.datetime.YearMonth
 
 class Forecast private constructor(
 
@@ -25,10 +25,10 @@ class Forecast private constructor(
     private fun consumptionFromGridPerMonth(): List<Double> {
         val resultMap = HashMap<YearMonth, Double>()
         for (i in 1..12) {
-            resultMap.put(YearMonth.of(year.value, i), 0.0)
+            resultMap.put(YearMonth(year.getValue(), i), 0.0)
         }
         inverter.consumptionFromGrid()
-                .filter{entry -> entry.key.year == this.year.value}
+                .filter{entry -> entry.key.year == this.year.getValue()}
                 .forEach{entry -> resultMap.put(entry.key, entry.value)}
         return resultMap.toSortedMap()
             .map { entry -> entry.value }

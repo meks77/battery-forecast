@@ -1,9 +1,9 @@
 package at.meks.calculation
 
 import at.meks.powerdata.SinglePowerData
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.YearMonth
 import org.slf4j.LoggerFactory
-import java.time.LocalDateTime
-import java.time.YearMonth
 
 class Inverter(val battery: Battery) {
 
@@ -34,7 +34,7 @@ class Inverter(val battery: Battery) {
     fun consume(timestamp: LocalDateTime, kwh: Double) {
         val consumedFromBattery = battery.consume(kwh)
         val consumedFromGrid = kwh - consumedFromBattery
-        consumptionFromGrid.compute(YearMonth.of(timestamp.year, timestamp.month)
+        consumptionFromGrid.compute(YearMonth(timestamp.year, timestamp.month)
         ) { month, currentConsumption ->
             if (currentConsumption == null) consumedFromGrid else currentConsumption + consumedFromGrid
         }
@@ -50,7 +50,7 @@ class Inverter(val battery: Battery) {
         }
         this.fedInKwh += fedInKwh
         val furtherFedInForMonth = fedInKwh
-        fedInToGrid.compute(YearMonth.of(timestamp.year, timestamp.month)
+        fedInToGrid.compute(YearMonth(timestamp.year, timestamp.month)
         ) { month, currentValue -> if (currentValue == null) furtherFedInForMonth else currentValue + furtherFedInForMonth }
         logger.debug("saved kwh {}; currentCapacity: {}; usedKwh: {}", kwh, battery.currentBatteryPower(),
             battery.usedKwh())

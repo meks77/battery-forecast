@@ -2,7 +2,7 @@ package at.meks.calculation
 
 import at.meks.powerdata.PowerData
 import at.meks.powerdata.SinglePowerData
-import java.time.Month
+import kotlinx.datetime.Month
 
 class OriginalPowerDataAggregation(val years: List<Int>) {
 

@@ -1,6 +1,6 @@
 package at.meks.powerdata
 
-import java.time.LocalDateTime
+import kotlinx.datetime.LocalDateTime
 
 /**
  * This record contains the power data, until to the timestamp.

@@ -1,13 +1,13 @@
 package at.meks.powerdataupload
 
 import at.meks.powerdata.SinglePowerData
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.char
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
 import java.io.Reader
 import java.text.NumberFormat
 import java.text.ParseException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Stream
 
@@ -15,7 +15,17 @@ class PowerFileParser {
 
     val columnHeaderTimestamp = "timestamp"
     val columnHeaderPower = "power"
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
+    val dateTimeFormat = LocalDateTime.Format {
+        day()
+        char('.')
+        monthNumber()
+        char('.')
+        year()
+        char(' ')
+        hour()
+        char(':')
+        minute()
+    }
     val numberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
 
     private val fedInRecords: Iterable<CSVRecord>
@@ -80,14 +90,14 @@ class PowerFileParser {
     private fun consumptionIsBeforeFedIn(currentFedInTimestamp: LocalDateTime?,
                                          currentConsumptionTimestamp: LocalDateTime?): Boolean {
         return currentFedInTimestamp != null && currentConsumptionTimestamp != null &&
-                currentFedInTimestamp.isAfter(currentConsumptionTimestamp)
+                currentConsumptionTimestamp < currentFedInTimestamp
     }
 
     private fun fedInIsBeforeConsumption(currentFedInTimestamp: LocalDateTime?,
                                          currentConsumptionTimestamp: LocalDateTime?): Boolean {
 
         return currentFedInTimestamp !=null && currentConsumptionTimestamp != null &&
-                currentFedInTimestamp.isBefore(currentConsumptionTimestamp)
+                currentFedInTimestamp < currentConsumptionTimestamp
     }
 
     private fun nextRecord(iterator: Iterator<CSVRecord>): CSVRecord? {
@@ -136,10 +146,10 @@ class PowerFileParser {
         return if (record == null)
             null
         else
-            LocalDateTime.parse(record.get(columnHeaderTimestamp), dateTimeFormatter)
+            LocalDateTime.parse(record.get(columnHeaderTimestamp), dateTimeFormat)
     }
 
     fun getTimestamp(record: CSVRecord): LocalDateTime {
-        return LocalDateTime.parse(record.get(columnHeaderTimestamp), dateTimeFormatter)
+        return LocalDateTime.parse(record.get(columnHeaderTimestamp), dateTimeFormat)
     }
 }
