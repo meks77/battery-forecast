@@ -5,9 +5,9 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.YearMonth
 import org.slf4j.LoggerFactory
 
-class Inverter(val battery: Battery) {
+class PhotovoltaikSystem(val battery: Battery) {
 
-    val logger = LoggerFactory.getLogger(Inverter::class.java)
+    val logger = LoggerFactory.getLogger(PhotovoltaikSystem::class.java)
 
     var fedInKwh: Double = 0.0
 

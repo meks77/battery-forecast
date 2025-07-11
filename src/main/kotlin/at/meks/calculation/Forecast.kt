@@ -8,13 +8,13 @@ class Forecast private constructor(
 
     private val inputPrice: Double,
     private val year: Year,
-    private val inverter: Inverter,
+    private val photovoltaikSystem: PhotovoltaikSystem,
     private val feedInTariffs: FeedInTariffs) {
 
     constructor(inputPrice: Double, year:Year, maxBatteryCapacityKwh:Double, batteryLifetimeCycles:Int,
                      powerData:PowerData,  feedInTariffs:FeedInTariffs)
-            : this(inputPrice, year, Inverter(Battery(maxBatteryCapacityKwh, batteryLifetimeCycles)), feedInTariffs) {
-        powerData.powerdataForYear(year).forEach(inverter::add)
+            : this(inputPrice, year, PhotovoltaikSystem(Battery(maxBatteryCapacityKwh, batteryLifetimeCycles)), feedInTariffs) {
+        powerData.powerdataForYear(year).forEach(photovoltaikSystem::add)
     }
 
     fun consumptionFromGridPerMonthAsString(): String {
@@ -27,7 +27,7 @@ class Forecast private constructor(
         for (i in 1..12) {
             resultMap.put(YearMonth(year.getValue(), i), 0.0)
         }
-        inverter.consumptionFromGrid()
+        photovoltaikSystem.consumptionFromGrid()
                 .filter{entry -> entry.key.year == this.year.getValue()}
                 .forEach{entry -> resultMap.put(entry.key, entry.value)}
         return resultMap.toSortedMap()
@@ -39,7 +39,7 @@ class Forecast private constructor(
     }
 
     fun fedInPerMonthAsString(): String {
-        return inverter.fedInToGrid()
+        return photovoltaikSystem.fedInToGrid()
             .toSortedMap()
             .map { entry -> entry.value }
             .map { value -> value * -1.0 }
@@ -51,7 +51,7 @@ class Forecast private constructor(
     }
 
     fun fedInKwh(): Double {
-        return inverter.fedInKwh()
+        return photovoltaikSystem.fedInKwh()
     }
 
     fun batteryCycles(): Double {
@@ -62,7 +62,7 @@ class Forecast private constructor(
         return 100.0 - 100.0 / battery().lifetimeCycles * battery().batteryCycles()
     }
 
-    private fun battery(): Battery = inverter.battery
+    private fun battery(): Battery = photovoltaikSystem.battery
 
     fun estimatedLifetimeYears(): Double {
         return 100 / (100.0 / battery().lifetimeCycles * battery().batteryCycles())
