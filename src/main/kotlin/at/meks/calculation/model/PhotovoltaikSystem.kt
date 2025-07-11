@@ -1,4 +1,4 @@
-package at.meks.calculation
+package at.meks.calculation.model
 
 import at.meks.powerdata.SinglePowerData
 import kotlinx.datetime.LocalDateTime

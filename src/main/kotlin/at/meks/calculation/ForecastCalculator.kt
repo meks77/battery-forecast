@@ -1,6 +1,7 @@
 package at.meks.calculation
 
 import at.meks.Year
+import at.meks.calculation.model.Forecast
 import at.meks.powerdata.PowerDataRepo
 import jakarta.enterprise.context.ApplicationScoped
 

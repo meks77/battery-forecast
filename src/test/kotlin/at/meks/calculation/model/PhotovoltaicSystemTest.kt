@@ -1,13 +1,12 @@
-package at.meks.calculation
+package at.meks.calculation.model
 
 import at.meks.powerdata.SinglePowerData
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.YearMonth
 import org.assertj.core.data.Offset
-import org.junit.jupiter.api.*
-
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import java.util.Map
-
 import org.assertj.core.api.Assertions.assertThat
 
 class PhotovoltaicSystemTest {

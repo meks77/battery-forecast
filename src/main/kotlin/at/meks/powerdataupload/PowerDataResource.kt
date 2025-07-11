@@ -22,7 +22,7 @@ class PowerDataResource(private val powerDataRepo: PowerDataRepo) {
         val consumptionReader = Files.newBufferedReader(consumptionFile.uploadedFile())
         val parser = PowerFileParser(fedInReader, consumptionReader)
 
-        parser.stream().forEach { powerData ->  powerDataRepo.add(powerData) }
+        parser.stream().forEach { powerData -> powerDataRepo.add(powerData) }
 
         return RestResponse.seeOther(uriInfo.getBaseUriBuilder()
             .path("/index.html").build())

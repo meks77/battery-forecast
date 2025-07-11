@@ -1,7 +1,8 @@
-package at.meks.calculation
+package at.meks.calculation.model
 
 import at.meks.powerdata.PowerData
 import at.meks.Year
+import at.meks.calculation.FeedInTariffs
 import kotlinx.datetime.YearMonth
 
 class Forecast private constructor(
