@@ -6,4 +6,5 @@ interface Logger {
     fun error(message: String, throwable: Throwable? = null)
 }
 
-expect fun createLogger(clazz: Any): Logger;
+expect fun createLogger(clazz: Any): Logger
+expect fun createLogger(name: String): Logger

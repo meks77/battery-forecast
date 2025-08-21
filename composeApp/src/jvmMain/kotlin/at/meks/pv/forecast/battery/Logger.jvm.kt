@@ -1,10 +1,9 @@
 package at.meks.pv.forecast.battery
 
-class WasmLogger(val clazz: Any): Logger {
+class JvmLogger(val clazz: Any): Logger {
 
     override fun error(message: String, throwable: Throwable?) {
             if (throwable != null) {
-
                 println("ERROR: [$clazz] $message. Throwable: ${throwable.message}")
             } else {
                 println("ERROR: [$clazz] $message")
@@ -20,4 +19,5 @@ class WasmLogger(val clazz: Any): Logger {
         }
 }
 
-actual fun createLogger(clazz: Any): Logger = WasmLogger(clazz)
+actual fun createLogger(clazz: Any): Logger = JvmLogger(clazz)
+actual fun createLogger(name: String): Logger = JvmLogger(name)

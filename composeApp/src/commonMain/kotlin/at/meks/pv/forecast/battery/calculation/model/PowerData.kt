@@ -1,4 +1,4 @@
-package at.meks.pv.forecast.battery.powerdata
+package at.meks.pv.forecast.battery.calculation.model
 
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.minusSeconds

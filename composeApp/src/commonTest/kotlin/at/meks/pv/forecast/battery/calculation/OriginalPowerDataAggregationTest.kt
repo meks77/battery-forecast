@@ -1,7 +1,7 @@
 package at.meks.pv.forecast.battery.calculation
 
-import at.meks.pv.forecast.battery.powerdata.PowerData
-import at.meks.pv.forecast.battery.powerdata.SinglePowerData
+import at.meks.pv.forecast.battery.calculation.model.PowerData
+import at.meks.pv.forecast.battery.calculation.model.SinglePowerData
 import kotlinx.datetime.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -24,6 +24,6 @@ class OriginalPowerDataAggregationTest {
             SinglePowerData(LocalDateTime(2025, 12, 4, 0, 15), 11.4, 94.0),
             ))
         val dataIntegration = OriginalPowerDataAggregation(powerData, listOf(2024))
-        assertEquals("-1.1, -2.4, -3.4, -4.4, -5.4, -6.4, -0.0, -7.4, -8.4, -9.4, -10.4, -11.4", dataIntegration.fedInPerMonthAsString());
+        assertEquals("-1.1, -2.4, -3.4, -4.4, -5.4, -6.4, -0.0, -7.4, -8.4, -9.4, -10.4, -11.4", dataIntegration.fedInPerMonthAsString())
     }
 }

@@ -21,3 +21,4 @@ class WasmLogger(val clazz: Any): Logger {
 }
 
 actual fun createLogger(clazz: Any): Logger = WasmLogger(clazz)
+actual fun createLogger(name: String): Logger = WasmLogger(name)

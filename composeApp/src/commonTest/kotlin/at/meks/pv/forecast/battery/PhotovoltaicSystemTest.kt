@@ -1,6 +1,5 @@
 package at.meks.pv.forecast.battery.calculation.model
 
-import at.meks.pv.forecast.battery.powerdata.SinglePowerData
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.YearMonth
 import kotlin.test.Test

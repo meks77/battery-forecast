@@ -1,7 +1,7 @@
 package at.meks.pv.forecast.battery.calculation
 
-import at.meks.pv.forecast.battery.powerdata.PowerData
-import at.meks.pv.forecast.battery.powerdata.SinglePowerData
+import at.meks.pv.forecast.battery.calculation.model.PowerData
+import at.meks.pv.forecast.battery.calculation.model.SinglePowerData
 import kotlinx.datetime.Month
 
 class OriginalPowerDataAggregation(val years: List<Int>) {

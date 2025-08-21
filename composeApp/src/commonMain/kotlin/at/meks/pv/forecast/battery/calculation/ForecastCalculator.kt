@@ -2,7 +2,6 @@ package at.meks.pv.forecast.battery.calculation
 
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.model.Forecast
-import at.meks.pv.forecast.battery.powerdata.PowerDataRepo
 
 class ForecastCalculator(val powerDataRepo: PowerDataRepo) {
 

@@ -1,6 +1,5 @@
 package at.meks.pv.forecast.battery.calculation.model
 
-import at.meks.pv.forecast.battery.powerdata.PowerData
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.FeedInTariffs
 import kotlinx.datetime.YearMonth
