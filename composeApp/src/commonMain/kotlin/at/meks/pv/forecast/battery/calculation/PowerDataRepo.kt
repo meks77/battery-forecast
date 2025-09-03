@@ -37,7 +37,7 @@ class PowerDataRepo {
         val singlePowerData = powerData.getOrPut(timestamp, { SinglePowerData(timestamp, 0.0, 0.0) })
 
         if (type == PowerType.FED_IN) {
-            powerData[timestamp] = singlePowerData.copy(fedInKwh = power)
+                powerData[timestamp] = singlePowerData.copy(fedInKwh = power)
         } else {
             powerData[timestamp] = singlePowerData.copy(consumptionKwh = power)
         }
@@ -46,4 +46,6 @@ class PowerDataRepo {
     fun deleteAll() {
         powerData.clear()
     }
+
+    fun size(): Int = powerData.size
 }

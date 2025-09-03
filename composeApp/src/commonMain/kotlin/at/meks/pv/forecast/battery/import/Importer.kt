@@ -11,9 +11,11 @@ data class PowerLine(val timestamp: LocalDateTime, val power: Double)
 
 class PowerfileImporter {
 
+    companion object {
+        val POWER_FILE_IMPORTER = PowerfileImporter()
+    }
+
     val logger = createLogger(this)
-
-
 
     fun import(fileContent: String, type: PowerType) {
         logger.info("import file content of type $type")
