@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import at.meks.pv.forecast.battery.calculation.PowerDataRepo
-import at.meks.pv.forecast.battery.calculation.PowerDataRepo.Companion.POWER_DATA_REPO
+import at.meks.pv.forecast.battery.PowerDataRepo
+import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.readString
@@ -26,11 +26,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FileImportButton(fileType: PowerDataRepo.PowerType, afterImport: () -> Unit) {
-    val fileImport = PowerfileImporter.POWER_FILE_IMPORTER
+    val fileImporter = PowerfileImporter()
     val filePickerResult = rememberFilePickerLauncher(type = FileKitType.File(listOf("csv"))) {
         if (it != null) {
             GlobalScope.launch {
-                fileImport.import(it.readString(), fileType)
+                fileImporter.import(it.readString(), fileType)
                 afterImport.invoke()
             }
         }
@@ -44,7 +44,10 @@ fun FileImportButton(fileType: PowerDataRepo.PowerType, afterImport: () -> Unit)
 
 @Composable
 fun ImportScreen(modifier : Modifier = Modifier) {
-    val powerDataValuesCount = remember { mutableIntStateOf(POWER_DATA_REPO.size()) }
+
+    val powerDataRepo = currentContext().powerDataRepo()
+
+    val powerDataValuesCount = remember { mutableIntStateOf(powerDataRepo.size()) }
 
     Box(
         modifier = Modifier.fillMaxSize().padding(10.dp),
@@ -63,12 +66,12 @@ fun ImportScreen(modifier : Modifier = Modifier) {
         }
         FlowRow(modifier = Modifier.padding(10.dp)) {
             FileImportButton(PowerDataRepo.PowerType.CONSUMPTION,
-                afterImport = { powerDataValuesCount.intValue = POWER_DATA_REPO.size() })
+                afterImport = { powerDataValuesCount.intValue = powerDataRepo.size() })
             FileImportButton(PowerDataRepo.PowerType.FED_IN,
-                afterImport = { powerDataValuesCount.intValue = POWER_DATA_REPO.size() })
+                afterImport = { powerDataValuesCount.intValue = powerDataRepo.size() })
             Button(modifier = Modifier.padding(10.dp), onClick = {
-                POWER_DATA_REPO.deleteAll()
-                powerDataValuesCount.intValue = POWER_DATA_REPO.size()
+                powerDataRepo.deleteAll()
+                powerDataValuesCount.intValue = powerDataRepo.size()
             }) { Text("Delete All")}
         }
 

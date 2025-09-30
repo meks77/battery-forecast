@@ -1,9 +1,10 @@
 package at.meks.pv.forecast.battery.calculation
 
 import at.meks.pv.forecast.battery.Year
+import at.meks.pv.forecast.battery.adapter.InMemoryPowerDataRepo
 import at.meks.pv.forecast.battery.calculation.model.Forecast
 
-class ForecastCalculator(val powerDataRepo: PowerDataRepo) {
+class ForecastCalculator(val powerDataRepo: InMemoryPowerDataRepo) {
 
     fun calculateForecast(price: Double, capacity: Double, cycles: Int, year: Year?, feedInTariffGrid: Double,
                           feedInTariffEnergyCommunity: Double, percentageAmountDeliveryToCommunity: Double

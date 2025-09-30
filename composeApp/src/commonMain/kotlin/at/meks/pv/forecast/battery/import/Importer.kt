@@ -1,7 +1,7 @@
 package at.meks.pv.forecast.battery.import
 
-import at.meks.pv.forecast.battery.calculation.PowerDataRepo.Companion.POWER_DATA_REPO
-import at.meks.pv.forecast.battery.calculation.PowerDataRepo.PowerType
+import at.meks.pv.forecast.battery.PowerDataRepo
+import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
 import at.meks.pv.forecast.battery.createLogger
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.format.char
@@ -11,18 +11,15 @@ data class PowerLine(val timestamp: LocalDateTime, val power: Double)
 
 class PowerfileImporter {
 
-    companion object {
-        val POWER_FILE_IMPORTER = PowerfileImporter()
-    }
 
     val logger = createLogger(this)
 
-    fun import(fileContent: String, type: PowerType) {
+    fun import(fileContent: String, type: PowerDataRepo.PowerType) {
         logger.info("import file content of type $type")
         val parser = PowerFileParser(fileContent)
         parser.stream().forEach {
             logger.info("power data: $it")
-            POWER_DATA_REPO.addOrReplace(it.timestamp, it.power, type)
+            currentContext().powerDataRepo().addOrReplace(it.timestamp, it.power, type)
         }
     }
 
