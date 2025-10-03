@@ -2,7 +2,10 @@ package at.meks.pv.forecast.battery.calculation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType.Companion.Number
@@ -15,7 +18,7 @@ import at.meks.pv.forecast.battery.RuntimeContext
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.model.Forecast
 import at.meks.pv.forecast.battery.createLogger
-import kotlin.math.absoluteValue
+import kotlin.math.round
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -31,7 +34,7 @@ abstract class ValidatingViewModel<T>(initialValue: String) : ViewModel() {
         !isInputValid(input)
     }
 
-    abstract internal fun isInputValid(input: String): Boolean
+    internal abstract fun isInputValid(input: String): Boolean
     abstract fun convertedValue(): T
 
 }
@@ -171,18 +174,17 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
         Button(onClick = {
             logger.debug("UserInput: $userInput")
             val forecast = Forecast(inputPrice = userInput.pricePerKwh,
-                year = Year(userInput.year),
-                maxBatteryCapacityKwh = userInput.batteryCapacity,
-                batteryLifetimeCycles = userInput.batteryCycles,
-                powerData = RuntimeContext.currentContext().powerDataRepo().powerData(Year(userInput.year)),
-                feedInTariffs = userInput.feedInTariffs)
-            fedInKwh = forecast.fedInKwh().toString()
-            usedKwhFromBattery = forecast.usedKwh().toString()
-            batteryLifecycles = forecast.batteryCycles().toString()
-            savedMoney = forecast.savedMoneyPerYear().absoluteValue.toString()
-            savedMoneyBecauseOfBattery = forecast.savedMoneyBecauseOfSavedPower().toString()
-            lostMoneyBecauseNotFedId = forecast.lostFeedInMoney().toString()
-            logger.debug("Forecast saved money per year: ${forecast.savedMoneyPerYear()}")
+                                    year = Year(userInput.year),
+                                    maxBatteryCapacityKwh = userInput.batteryCapacity,
+                                    batteryLifetimeCycles = userInput.batteryCycles,
+                                    powerData = RuntimeContext.currentContext().powerDataRepo().powerData(Year(userInput.year)),
+                                    feedInTariffs = userInput.feedInTariffs)
+            fedInKwh = forecast.fedInKwh().round(2).toString()
+            usedKwhFromBattery = forecast.usedKwh().round(2).toString()
+            batteryLifecycles = forecast.batteryCycles().round(2).toString()
+            savedMoney = forecast.savedMoneyPerYear().round(2).toString()
+            savedMoneyBecauseOfBattery = forecast.savedMoneyBecauseOfSavedPower().round(2).toString()
+            lostMoneyBecauseNotFedId = forecast.lostFeedInMoney().round(2).toString()
         }, modifier = modifier.fillMaxWidth()) {
             Text("Calculate")
         }
@@ -199,4 +201,13 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             DisplayField(lostMoneyBecauseNotFedId, "Lost money/not fed in")
         }
     }
+
+}
+
+fun Double.round(decimals:Int): Double {
+    var factor = 1
+    for (x in 1..decimals) {
+        factor*=10
+    }
+    return round(this.times(factor)).div(factor)
 }
