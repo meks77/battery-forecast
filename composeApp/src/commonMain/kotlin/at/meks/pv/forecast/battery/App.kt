@@ -1,10 +1,13 @@
 package at.meks.pv.forecast.battery
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Calculate
 import androidx.compose.material.icons.filled.ImportExport
@@ -16,14 +19,19 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import at.meks.pv.forecast.battery.calculation.CalculatorScreen
 import at.meks.pv.forecast.battery.import.ImportScreen
+import battery_forecast.composeapp.generated.resources.Res
+import battery_forecast.composeapp.generated.resources.app_calculate_icon_desc
+import battery_forecast.composeapp.generated.resources.app_calculate_icon_text
+import battery_forecast.composeapp.generated.resources.app_import_icon_desc
+import battery_forecast.composeapp.generated.resources.app_import_icon_text
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class Destination(
-    val label: String,
     val icon: ImageVector
 ) {
-    CALCULATOR("Calculate", Icons.Default.Calculate),
-    IMPORT("Import Power Data", Icons.Default.ImportExport)
+    CALCULATOR(Icons.Default.Calculate),
+    IMPORT(Icons.Default.ImportExport)
 }
 
 
@@ -48,10 +56,10 @@ fun App(modifier: Modifier = Modifier) {
                         icon = {
                             Icon(
                                 Destination.CALCULATOR.icon,
-                                contentDescription = Destination.CALCULATOR.label
+                                contentDescription = stringResource(Res.string.app_calculate_icon_desc)
                             )
                         },
-                        label = { Text(Destination.CALCULATOR.label) }
+                        label = { Text(stringResource(Res.string.app_calculate_icon_text)) }
                     )
                     NavigationBarItem(
                         selected = showImport,
@@ -63,36 +71,37 @@ fun App(modifier: Modifier = Modifier) {
                         icon = {
                             Icon(
                                 Destination.IMPORT.icon,
-                                contentDescription = Destination.IMPORT.label
+                                contentDescription = stringResource(Res.string.app_import_icon_desc)
                             )
                         },
-                        label = { Text(Destination.IMPORT.label) }  )
+                        label = { Text(stringResource(Res.string.app_import_icon_text)) }  )
                 }
 
+            },
+            content = {
+                Column(
+                    modifier = Modifier.padding(it).scrollable(rememberScrollState(), Orientation.Vertical),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    AnimatedVisibility(showCalculator) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            CalculatorScreen()
+                        }
+                    }
+                    AnimatedVisibility(showImport) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            ImportScreen()
+                        }
+                    }
+                }
             }
 
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
-                AnimatedVisibility(showCalculator) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        CalculatorScreen()
-                    }
-                }
-                AnimatedVisibility(showImport) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        ImportScreen()
-                    }
-                }
-            }
-        }
+        )
     }
 }

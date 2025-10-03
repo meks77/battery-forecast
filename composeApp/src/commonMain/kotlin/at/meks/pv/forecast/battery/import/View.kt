@@ -17,11 +17,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import at.meks.pv.forecast.battery.PowerDataRepo
 import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
+import battery_forecast.composeapp.generated.resources.Res
+import battery_forecast.composeapp.generated.resources.import_button_consumption
+import battery_forecast.composeapp.generated.resources.import_button_fed_in
+import battery_forecast.composeapp.generated.resources.import_delete
+import battery_forecast.composeapp.generated.resources.imported_power_entries
 import io.github.vinceglb.filekit.dialogs.FileKitType
 import io.github.vinceglb.filekit.dialogs.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.readString
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -38,7 +44,11 @@ fun FileImportButton(fileType: PowerDataRepo.PowerType, afterImport: () -> Unit)
     Button(modifier = Modifier.padding(10.dp), onClick = {
         filePickerResult.launch()
     }) {
-        Text("Import ${fileType.description}")
+        if (fileType == PowerDataRepo.PowerType.CONSUMPTION) {
+            Text(stringResource(Res.string.import_button_consumption))
+        } else {
+            Text(stringResource(Res.string.import_button_fed_in))
+        }
     }
 }
 
@@ -57,7 +67,7 @@ fun ImportScreen(modifier : Modifier = Modifier) {
         FlowRow(modifier = Modifier.padding(10.dp)) {
             BadgedBox(badge =  {
                     Badge(contentColor = Color.White) {
-                        Text("${powerDataValuesCount.value} Power Data Entries")
+                        Text(stringResource(Res.string.imported_power_entries, powerDataValuesCount.value))
                     }
                 }
             ) {
@@ -72,7 +82,7 @@ fun ImportScreen(modifier : Modifier = Modifier) {
             Button(modifier = Modifier.padding(10.dp), onClick = {
                 powerDataRepo.deleteAll()
                 powerDataValuesCount.intValue = powerDataRepo.size()
-            }) { Text("Delete All")}
+            }) { Text(stringResource(Res.string.import_delete))}
         }
 
     }

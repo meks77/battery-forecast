@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="import_button_consumption">Consumption</string>
+    <string name="import_button_fed_in">Feed In</string>
+    <string name="imported_power_entries">%1$d Power Data Entries</string>
+    <string name="import_delete">Delete All</string>
+    <string name="app_import_icon_text">Import Power Data</string>
+    <string name="app_import_icon_desc">Import of Netz NOE power consumption and feed in files</string>
+    <string name="app_calculate_icon_text">Calculate</string>
+    <string name="app_calculate_icon_desc">Calculate</string>
+    <string name="calculation_params">Calculation Params</string>
+    <string name="calculation_params_year">Calculated year</string>
+    <string name="calculation_params_battery">Battery Parameters</string>
+    <string name="calculation_params_battery_capacity">Battery capacity</string>
+    <string name="calculation_params_prices_grid">Energy Prices Grid</string>
+    <string name="calculation_params_prices_grid_consumption">Consumption overall price/kwh</string>
+    <string name="calculation_params_prices_grid_feed_in">Feed-in price/kwh</string>
+    <string name="calculation_params_prices_community">Energy Prices Community</string>
+    <string name="calculation_params_prices_community_feed_in">Feed-in price/kwh</string>
+    <string name="calculation_params_prices_community_percent_feed_in">% of feed in energy to community</string>
+    <string name="calculation_button_start">Calculate</string>
+    <string name="calculation_result">Calculation Results</string>
+    <string name="calculation_result_feed_in_kwh">Feed in kWh</string>
+    <string name="calculation_result_consumption_from_battery">Consumption from battery(kwh)</string>
+    <string name="calculation_result_battery_charging_cycles">Battery charging cycles</string>
+    <string name="calculation_result_saved_money">Saved money</string>
+    <string name="calculation_result_saved_money_reason_battery">Saved money/consumption from battery</string>
+    <string name="calculation_result_lost_money_reason_not_feed_in">Lost money/not feed in</string>
+
+</resources>

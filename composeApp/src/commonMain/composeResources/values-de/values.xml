@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="import_button_consumption">Verbrauch</string>
+    <string name="import_button_fed_in">Einspeisung</string>
+    <string name="imported_power_entries">%1$d Zeitstempel mit Energiedaten vorhanden</string>
+    <string name="import_delete">Alle Daten löschen</string>
+    <string name="app_import_icon_text">Import Verbrauch/Einspeisung</string>
+    <string name="app_import_icon_desc">Import von Netz NOE Verbrauchs- und Einspeisungsdateien</string>
+    <string name="app_calculate_icon_text">Berechnung</string>
+    <string name="app_calculate_icon_desc">Berechnung</string>
+    <string name="calculation_params">Berechnungsparameter</string>
+    <string name="calculation_params_year">Berechnetes Jahr</string>
+    <string name="calculation_params_battery">Batterieeigenschaften</string>
+    <string name="calculation_params_battery_capacity">Kapazität</string>
+    <string name="calculation_params_prices_grid">Energiepreise Netz</string>
+    <string name="calculation_params_prices_grid_consumption">Bezug Gesamtpreis/kWh</string>
+    <string name="calculation_params_prices_grid_feed_in">Einspeisevergütung/kwh</string>
+    <string name="calculation_params_prices_community">Energiepreise EEG</string>
+    <string name="calculation_params_prices_community_feed_in">Einspeisevergütung/kwh</string>
+    <string name="calculation_params_prices_community_percent_feed_in">% an eingespeister Energie an EEG</string>
+    <string name="calculation_button_start">Berechnen</string>
+    <string name="calculation_result">Ergebnis</string>
+    <string name="calculation_result_feed_in_kwh">Feed in kWh</string>
+    <string name="calculation_result_consumption_from_battery">Bezug von Batterie(kwh)</string>
+    <string name="calculation_result_battery_charging_cycles">Batterie Ladezyklen</string>
+    <string name="calculation_result_saved_money">Gespartes Geld</string>
+    <string name="calculation_result_saved_money_reason_battery">Gespartes Geld/Bezug von Batterie</string>
+    <string name="calculation_result_lost_money_reason_not_feed_in">Verlorenes Geld/nicht eingespeist</string>
+
+</resources>

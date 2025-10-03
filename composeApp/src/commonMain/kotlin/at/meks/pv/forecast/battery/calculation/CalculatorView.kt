@@ -18,6 +18,8 @@ import at.meks.pv.forecast.battery.RuntimeContext
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.model.Forecast
 import at.meks.pv.forecast.battery.createLogger
+import battery_forecast.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.round
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -106,14 +108,14 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
     val userInput = UserInput(0.27, 9.0, 6000, 2024, FeedInTariffs(0.06, 0.1, 0.1))
     Column(modifier = modifier.padding(4.dp)) {
 
-        Text("Calculation Params")
+        Text(stringResource(Res.string.calculation_params))
         ValidatingInputField(
             updateState = { userInput.year = it },
-            label = "Calculated year",
+            label = stringResource(Res.string.calculation_params_year),
             viewModel = IntViewModel(userInput.year),
             supportingText = ERROR_TEXT_WRONG_INT
         )
-        Text("Battery Parameters")
+        Text(stringResource(Res.string.calculation_params_battery))
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -121,46 +123,46 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
         ) {
             ValidatingInputField(
                 updateState = { userInput.batteryCapacity = it },
-                label = "Battery capacity",
+                label = stringResource(Res.string.calculation_params_battery_capacity),
                 viewModel = DoubleViewModel(userInput.batteryCapacity),
                 supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
             )
-            ValidatingInputField(
-                updateState = { userInput.batteryCycles = it },
-                label = "Battery Lifetime Cycles",
-                viewModel = IntViewModel(userInput.batteryCycles),
-                supportingText = ERROR_TEXT_WRONG_INT
-            )
         }
 
-        Text("Energy Prices Grid")
-        ValidatingInputField(
-            updateState = { userInput.pricePerKwh = it },
-            label = "Price per kWh",
-            viewModel = DoubleViewModel(userInput.pricePerKwh),
-            supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
-        )
-
-        Text("Energy Prices Community")
+        Text(stringResource(Res.string.calculation_params_prices_grid))
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             ValidatingInputField(
-                updateState = { userInput.feedInTariffs.feedInTariffGrid = it },
-                label = "Feed-in tariff grid",
-                viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffGrid),
+                updateState = { userInput.pricePerKwh = it },
+                label = stringResource(Res.string.calculation_params_prices_grid_consumption),
+                viewModel = DoubleViewModel(userInput.pricePerKwh),
                 supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
             )
             ValidatingInputField(
+                updateState = { userInput.feedInTariffs.feedInTariffGrid = it },
+                label = stringResource(Res.string.calculation_params_prices_grid_feed_in),
+                viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffGrid),
+                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+            )
+        }
+
+        Text(stringResource(Res.string.calculation_params_prices_community))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+
+            ValidatingInputField(
                 updateState = { userInput.feedInTariffs.feedInTariffEnergyCommunity = it },
-                label = "Feed-in tariff energy community",
+                label = stringResource(Res.string.calculation_params_prices_community_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity),
                 supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
             )
             ValidatingInputField(
                 updateState = { userInput.feedInTariffs.percentageAmountDeliveryToCommunity = it / 100.0 },
-                label = "% of fed in energy to community",
+                label = stringResource(Res.string.calculation_params_prices_community_percent_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity * 100.0),
                 supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
             )
@@ -186,19 +188,19 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             savedMoneyBecauseOfBattery = forecast.savedMoneyBecauseOfSavedPower().round(2).toString()
             lostMoneyBecauseNotFedId = forecast.lostFeedInMoney().round(2).toString()
         }, modifier = modifier.fillMaxWidth()) {
-            Text("Calculate")
+            Text(stringResource(Res.string.calculation_button_start))
         }
-        Text("Calculation Results")
+        Text(stringResource(Res.string.calculation_result))
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            DisplayField(fedInKwh, "Fed in kWh")
-            DisplayField(usedKwhFromBattery, "Used kWh from battery")
-            DisplayField(batteryLifecycles, "Battery Lifetime Cycles")
-            DisplayField(savedMoney, "Saved money")
-            DisplayField(savedMoneyBecauseOfBattery, "Saved money/saved to battery")
-            DisplayField(lostMoneyBecauseNotFedId, "Lost money/not fed in")
+            DisplayField(fedInKwh, stringResource(Res.string.calculation_result_feed_in_kwh))
+            DisplayField(usedKwhFromBattery, stringResource(Res.string.calculation_result_consumption_from_battery))
+            DisplayField(batteryLifecycles, stringResource(Res.string.calculation_result_battery_charging_cycles))
+            DisplayField(savedMoney, stringResource(Res.string.calculation_result_saved_money))
+            DisplayField(savedMoneyBecauseOfBattery, stringResource(Res.string.calculation_result_saved_money_reason_battery))
+            DisplayField(lostMoneyBecauseNotFedId, stringResource(Res.string.calculation_result_lost_money_reason_not_feed_in))
         }
     }
 
