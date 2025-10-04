@@ -17,7 +17,7 @@ class OriginalPowerDataAggregation(val years: List<Int>) {
 
     private fun calculatePowerStatistics(singlePowerData: SinglePowerData) {
         consumptionFromGrid[singlePowerData.timestampUntil.month] = singlePowerData.consumptionKwh
-        fedInToGrid[singlePowerData.timestampUntil.month] = singlePowerData.fedInKwh
+        fedInToGrid[singlePowerData.timestampUntil.month] = singlePowerData.feedInKwh
     }
 
     fun consumptionPerMonthAsString(): String {

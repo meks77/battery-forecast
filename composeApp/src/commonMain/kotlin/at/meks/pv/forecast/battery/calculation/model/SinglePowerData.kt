@@ -8,9 +8,9 @@ import kotlinx.datetime.LocalDateTime
  * between 1.1.2025 00:00:00 and 1.1.2025 00:14:59 inclusive
  *
  * @param timestampUntil timestamp until exclusive, of the power data
- * @param fedInKwh the power which was delivered TO the grid
+ * @param feedInKwh the power which was delivered TO the grid
  * @param consumptionKwh the power which was consumed FROM the grid
  */
-data class SinglePowerData(val timestampUntil: LocalDateTime, val fedInKwh: Double, val consumptionKwh: Double) {
+data class SinglePowerData(val timestampUntil: LocalDateTime, val feedInKwh: Double, val consumptionKwh: Double) {
 
 }

@@ -4,6 +4,7 @@ import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.model.Forecast
 
+//TODO: either use the calculator or remove it completely
 class ForecastCalculator() {
 
     private val powerDataRepo = currentContext().powerDataRepo()

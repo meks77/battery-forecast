@@ -17,9 +17,9 @@ class Forecast private constructor(
         powerData.powerdataForYear(year).forEach(photovoltaikSystem::add)
     }
 
-    fun consumptionFromGridPerMonthAsString(): String {
-        return consumptionFromGridPerMonth()
-            .joinToString(" ,") { d -> d.toString() }
+    fun consumptionFromGrid(): Map<YearMonth, Double> {
+        return photovoltaikSystem.consumptionFromGrid()
+            .filter { entry -> entry.key.year == this.year.getValue() }
     }
 
     private fun consumptionFromGridPerMonth(): List<Double> {
@@ -39,12 +39,9 @@ class Forecast private constructor(
         return consumptionFromGridPerMonth().sum()
     }
 
-    fun fedInPerMonthAsString(): String {
-        return photovoltaikSystem.fedInToGrid()
-            .entries.sortedBy { entry -> entry.key }
-            .map { entry -> entry.value }
-            .map { value -> value * -1.0 }
-            .joinToString(", ") { value -> value.toString() }
+    fun feedInPerMonth(): Map<YearMonth, Double>  {
+        return photovoltaikSystem.feedInToGrid()
+            .filter { entry -> entry.key.year == this.year.getValue() }
     }
 
     fun usedKwh(): Double {
@@ -52,7 +49,7 @@ class Forecast private constructor(
     }
 
     fun fedInKwh(): Double {
-        return photovoltaikSystem.fedInKwh()
+        return photovoltaikSystem.feedInKwh()
     }
 
     fun batteryCycles(): Double {

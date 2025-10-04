@@ -31,7 +31,7 @@ class InMemoryPowerDataRepo: PowerDataRepo {
         val singlePowerData = powerData.getOrPut(timestamp, { SinglePowerData(timestamp, 0.0, 0.0) })
 
         if (type == PowerDataRepo.PowerType.FED_IN) {
-                powerData[timestamp] = singlePowerData.copy(fedInKwh = power)
+                powerData[timestamp] = singlePowerData.copy(feedInKwh = power)
         } else {
             powerData[timestamp] = singlePowerData.copy(consumptionKwh = power)
         }

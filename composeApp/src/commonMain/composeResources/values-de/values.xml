@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="import_button_consumption">Verbrauch</string>
+    <string name="import_button_consumption">Bezug</string>
     <string name="import_button_fed_in">Einspeisung</string>
     <string name="imported_power_entries">%1$d Zeitstempel mit Energiedaten vorhanden</string>
     <string name="import_delete">Alle Daten löschen</string>
@@ -20,11 +20,26 @@
     <string name="calculation_params_prices_community_percent_feed_in">% an eingespeister Energie an EEG</string>
     <string name="calculation_button_start">Berechnen</string>
     <string name="calculation_result">Ergebnis</string>
-    <string name="calculation_result_feed_in_kwh">Feed in kWh</string>
+    <string name="calculation_result_feed_in_kwh">Einspeisung in kWh</string>
     <string name="calculation_result_consumption_from_battery">Bezug von Batterie(kwh)</string>
     <string name="calculation_result_battery_charging_cycles">Batterie Ladezyklen</string>
     <string name="calculation_result_saved_money">Gespartes Geld</string>
     <string name="calculation_result_saved_money_reason_battery">Gespartes Geld/Bezug von Batterie</string>
     <string name="calculation_result_lost_money_reason_not_feed_in">Verlorenes Geld/nicht eingespeist</string>
-
+    <string name="calculation_result_chart_bar_name_with_battery">%1$s mit Batterie</string>
+    <string name="calculation_result_chart_bar_name_without_battery">%1$s ohne Batterie</string>
+    <string name="calculation_result_chart_bar_consumption">Bezug</string>
+    <string name="calculation_result_chart_bar_feed_in">Einspeisung</string>
+    <string name="calculation_result_chart_row_label_january">Jän</string>
+    <string name="calculation_result_chart_row_label_february">Feb</string>
+    <string name="calculation_result_chart_row_label_march">Mär</string>
+    <string name="calculation_result_chart_row_label_april">Apr</string>
+    <string name="calculation_result_chart_row_label_may">Mai</string>
+    <string name="calculation_result_chart_row_label_june">Jun</string>
+    <string name="calculation_result_chart_row_label_july">Jul</string>
+    <string name="calculation_result_chart_row_label_august">Aug</string>
+    <string name="calculation_result_chart_row_label_september">Sep</string>
+    <string name="calculation_result_chart_row_label_october">Okt</string>
+    <string name="calculation_result_chart_row_label_november">Nov</string>
+    <string name="calculation_result_chart_row_label_december">Dez</string>
 </resources>

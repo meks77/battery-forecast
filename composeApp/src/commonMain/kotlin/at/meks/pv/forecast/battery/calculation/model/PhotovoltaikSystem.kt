@@ -9,26 +9,26 @@ class PhotovoltaikSystem(val battery: Battery) {
 
     val logger: Logger = createLogger(this)
 
-    var fedInKwh: Double = 0.0
+    var feedInKwh: Double = 0.0
 
     var consumptionFromGrid = mutableMapOf<YearMonth, Double>()
-    var fedInToGrid = mutableMapOf<YearMonth, Double>()
+    var feedInToGrid = mutableMapOf<YearMonth, Double>()
 
     fun consumptionFromGrid(): Map<YearMonth, Double> {
         return consumptionFromGrid
     }
 
-    fun fedInToGrid(): Map<YearMonth, Double> {
-        return fedInToGrid
+    fun feedInToGrid(): Map<YearMonth, Double> {
+        return feedInToGrid
     }
 
-    fun fedInKwh(): Double {
-        return fedInKwh
+    fun feedInKwh(): Double {
+        return feedInKwh
     }
 
     fun add(singlePowerData: SinglePowerData) {
         consume(singlePowerData.timestampUntil, singlePowerData.consumptionKwh)
-        save(singlePowerData.timestampUntil, singlePowerData.fedInKwh)
+        save(singlePowerData.timestampUntil, singlePowerData.feedInKwh)
     }
 
     fun consume(timestamp: LocalDateTime, kwh: Double) {
@@ -41,14 +41,14 @@ class PhotovoltaikSystem(val battery: Battery) {
 
     private fun save(timestamp: LocalDateTime, kwh: Double) {
         val savedKwh = battery.save(kwh)
-        var fedInKwh = 0.0
+        var feedInKwh = 0.0
         if (savedKwh < kwh) {
-            fedInKwh = kwh - savedKwh
+            feedInKwh = kwh - savedKwh
         }
-        this.fedInKwh += fedInKwh
-        val furtherFedInForMonth = fedInKwh
+        this.feedInKwh += feedInKwh
+        val furtherFedInForMonth = feedInKwh
         val yearMonth = YearMonth(timestamp.year, timestamp.month)
-        fedInToGrid[yearMonth] = fedInToGrid.getOrElse(yearMonth) { 0.0} + furtherFedInForMonth
+        feedInToGrid[yearMonth] = feedInToGrid.getOrElse(yearMonth) { 0.0} + furtherFedInForMonth
         logger.debug("saved kwh $kwh; currentCapacity: $battery.currentBatteryPower(); usedKwh: $battery.usedKwh()")
     }
 }

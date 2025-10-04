@@ -46,11 +46,11 @@ class PhotovoltaicSystemTest {
     }
 
     private fun assertFedIn(photovoltaikSystem: PhotovoltaikSystem, january: YearMonth, expected: Double) {
-        assertEquals(expected, photovoltaikSystem.fedInToGrid()[january]!!, 0.00000001)
+        assertEquals(expected, photovoltaikSystem.feedInToGrid()[january]!!, 0.00000001)
     }
 
     private fun assertThatNothingWasFedId(photovoltaikSystem: PhotovoltaikSystem, month: YearMonth) {
-        assertEquals(0.0, photovoltaikSystem.fedInToGrid()[month]!!)
+        assertEquals(0.0, photovoltaikSystem.feedInToGrid()[month]!!)
     }
     
 }
