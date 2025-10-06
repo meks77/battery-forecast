@@ -18,6 +18,8 @@
     <string name="calculation_params_prices_community">Energy Prices Community</string>
     <string name="calculation_params_prices_community_feed_in">Feed-in price/kwh</string>
     <string name="calculation_params_prices_community_percent_feed_in">% of feed in energy to community</string>
+    <string name="calculation_params_error_wrong_decimal_number">Please enter a valid number with one decimal point</string>
+    <string name="calculation_params_error_not_digits">Please enter only digits</string>
     <string name="calculation_button_start">Calculate</string>
     <string name="calculation_result">Calculation Results</string>
     <string name="calculation_result_feed_in_kwh">Feed in kWh</string>

@@ -18,6 +18,8 @@
     <string name="calculation_params_prices_community">Energiepreise EEG</string>
     <string name="calculation_params_prices_community_feed_in">Einspeisevergütung/kwh</string>
     <string name="calculation_params_prices_community_percent_feed_in">% an eingespeister Energie an EEG</string>
+    <string name="calculation_params_error_wrong_decimal_number">Bitte geben sie eine Zahl mit "." als Dezimalkennzeichen ein(z.B. 14.59)</string>
+    <string name="calculation_params_error_not_digits">Bitte nur Zahlen eingeben</string>
     <string name="calculation_button_start">Berechnen</string>
     <string name="calculation_result">Ergebnis</string>
     <string name="calculation_result_feed_in_kwh">Einspeisung in kWh</string>

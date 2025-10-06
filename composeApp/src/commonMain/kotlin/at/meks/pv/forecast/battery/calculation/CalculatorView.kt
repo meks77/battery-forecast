@@ -130,10 +130,6 @@ fun DisplayField(value: String, label: String, modifier: Modifier = Modifier) {
     )
 }
 
-private const val ERROR_TEXT_WRONG_DECIMAL_NUMBER = "Please enter a valid number with one decimal point."
-
-private const val ERROR_TEXT_WRONG_INT = "Please enter only digits."
-
 @Composable
 fun CalculatorScreen(modifier: Modifier = Modifier) {
     val logger: Logger = createLogger("CalculatorScreen")
@@ -145,7 +141,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             updateState = { userInput.year = it },
             label = stringResource(Res.string.calculation_params_year),
             viewModel = IntViewModel(userInput.year),
-            supportingText = ERROR_TEXT_WRONG_INT,
+            supportingText = stringResource(Res.string.calculation_params_error_not_digits),
             modifier = Modifier.testTag("yearInputField")
         )
         Text(stringResource(Res.string.calculation_params_battery))
@@ -158,7 +154,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.batteryCapacity = it },
                 label = stringResource(Res.string.calculation_params_battery_capacity),
                 viewModel = DoubleViewModel(userInput.batteryCapacity),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number),
                 modifier = Modifier.testTag("batteryCapacityInputField")
             )
         }
@@ -172,14 +168,14 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.pricePerKwh = it },
                 label = stringResource(Res.string.calculation_params_prices_grid_consumption),
                 viewModel = DoubleViewModel(userInput.pricePerKwh),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number),
                 modifier = Modifier.testTag("pricePerKwhInputField")
             )
             ValidatingInputField(
                 updateState = { userInput.feedInTariffs.feedInTariffGrid = it },
                 label = stringResource(Res.string.calculation_params_prices_grid_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffGrid),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number),
                 modifier = Modifier.testTag("feedInGridInputField")
             )
         }
@@ -194,13 +190,13 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.feedInTariffs.feedInTariffEnergyCommunity = it },
                 label = stringResource(Res.string.calculation_params_prices_community_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+                supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number)
             )
             ValidatingInputField(
                 updateState = { userInput.feedInTariffs.percentageAmountDeliveryToCommunity = it / 100.0 },
                 label = stringResource(Res.string.calculation_params_prices_community_percent_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity * 100.0),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number),
                 modifier = Modifier.testTag("feedInCommunityPercentageInputField")
             )
         }
