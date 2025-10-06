@@ -305,7 +305,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
 
 
             fedInKwh = forecast.fedInKwh().round(2).toString()
-            usedKwhFromBattery = forecast.usedKwh().round(2).toString()
+            usedKwhFromBattery = forecast.consumptionFromBatteryKwh().round(2).toString()
             batteryLifecycles = forecast.batteryCycles().round(2).toString()
             savedMoney = forecast.savedMoneyPerYear().round(2).toString()
             savedMoneyBecauseOfBattery = forecast.savedMoneyBecauseOfSavedPower().round(2).toString()

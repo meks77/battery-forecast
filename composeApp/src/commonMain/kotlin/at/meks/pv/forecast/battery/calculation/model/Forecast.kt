@@ -18,33 +18,34 @@ class Forecast private constructor(
     }
 
     fun consumptionFromGrid(): Map<YearMonth, Double> {
-        return photovoltaikSystem.consumptionFromGrid()
+        val filteredConsumption = photovoltaikSystem.consumptionFromGrid()
             .filter { entry -> entry.key.year == this.year.getValue() }
+        return addMissingMonths(filteredConsumption).toMap()
     }
 
-    private fun consumptionFromGridPerMonth(): List<Double> {
-        val resultMap = HashMap<YearMonth, Double>()
+    private fun addMissingMonths(
+        map: Map<YearMonth, Double>): Map<YearMonth, Double> {
+        val result = map.toMutableMap()
         for (i in 1..12) {
-            resultMap.put(YearMonth(year.getValue(), i), 0.0)
+            val month = YearMonth(year.getValue(), i)
+            if (!result.containsKey(month)) {
+                result.put(month, 0.0)
+            }
         }
-        photovoltaikSystem.consumptionFromGrid()
-                .filter{entry -> entry.key.year == this.year.getValue()}
-                .forEach{entry -> resultMap.put(entry.key, entry.value)}
-        return resultMap.entries
-            .sortedBy { entry -> entry.key }
-            .map { entry -> entry.value }
+        return result.toMap()
     }
 
     fun consumptionKwh(): Double {
-        return consumptionFromGridPerMonth().sum()
+        return consumptionFromGrid().filter { yearMonth -> yearMonth.key.year == year.getValue() }.values.sum()
     }
 
     fun feedInPerMonth(): Map<YearMonth, Double>  {
-        return photovoltaikSystem.feedInToGrid()
+        val filteredEntries = photovoltaikSystem.feedInToGrid()
             .filter { entry -> entry.key.year == this.year.getValue() }
+        return addMissingMonths(filteredEntries)
     }
 
-    fun usedKwh(): Double {
+    fun consumptionFromBatteryKwh(): Double {
         return battery().usedKwh()
     }
 
@@ -67,16 +68,16 @@ class Forecast private constructor(
     }
 
     fun lostFeedInMoney(): Double {
-        return fedInKwhToEnergyPurchaseAgreementPartner() * feedInTariffs.feedInTariffGrid +
-                fedInKwhToCommunity() * feedInTariffs.feedInTariffEnergyCommunity
+        return consumptionFromBatteryKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity) * feedInTariffs.feedInTariffGrid +
+                consumptionFromBatteryKwh() * feedInTariffs.percentageAmountDeliveryToCommunity * feedInTariffs.feedInTariffEnergyCommunity
     }
 
     fun fedInKwhToEnergyPurchaseAgreementPartner(): Double {
-        return battery().usedKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity)
+        return fedInKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity)
     }
 
-    private fun fedInKwhToCommunity(): Double {
-        return battery().usedKwh() * feedInTariffs.percentageAmountDeliveryToCommunity
+    fun fedInKwhToCommunity(): Double {
+        return fedInKwh() * feedInTariffs.percentageAmountDeliveryToCommunity
     }
 
     fun savedMoneyPerYear(): Double {
