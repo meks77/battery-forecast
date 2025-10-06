@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType.Companion.Number
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import ir.ehsannarmani.compose_charts.models.Bars
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import kotlinx.datetime.Month
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.round
 import kotlin.uuid.ExperimentalUuidApi
@@ -67,12 +69,13 @@ fun <T> ValidatingInputField(
     label: String,
     updateState: (T) -> Unit,
     viewModel: ValidatingViewModel<T>,
-    supportingText: String
+    supportingText: String,
+    modifier: Modifier = Modifier
 ) {
     val validatingViewModel = viewModel<ValidatingViewModel<T>>(key = Uuid.random().toString()) { viewModel }
     var inputText by remember { mutableStateOf(validatingViewModel.input) }
     OutlinedTextField(
-        modifier = Modifier
+        modifier = modifier
             .padding(1.dp),
         value = validatingViewModel.input,
         onValueChange = {
@@ -115,9 +118,9 @@ fun EnergyDiagram(bars: List<Bars>, minValue: Double, maxValue: Double, modifier
 }
 
 @Composable
-fun DisplayField(value: String, label: String) {
+fun DisplayField(value: String, label: String, modifier: Modifier = Modifier) {
     OutlinedTextField(
-        modifier = Modifier.padding(1.dp),
+        modifier = modifier.padding(1.dp),
         value = value,
         label = { Text(label) },
         singleLine = true,
@@ -142,7 +145,8 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             updateState = { userInput.year = it },
             label = stringResource(Res.string.calculation_params_year),
             viewModel = IntViewModel(userInput.year),
-            supportingText = ERROR_TEXT_WRONG_INT
+            supportingText = ERROR_TEXT_WRONG_INT,
+            modifier = Modifier.testTag("yearInputField")
         )
         Text(stringResource(Res.string.calculation_params_battery))
         FlowRow(
@@ -154,7 +158,8 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.batteryCapacity = it },
                 label = stringResource(Res.string.calculation_params_battery_capacity),
                 viewModel = DoubleViewModel(userInput.batteryCapacity),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                modifier = Modifier.testTag("batteryCapacityInputField")
             )
         }
 
@@ -167,13 +172,15 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.pricePerKwh = it },
                 label = stringResource(Res.string.calculation_params_prices_grid_consumption),
                 viewModel = DoubleViewModel(userInput.pricePerKwh),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                modifier = Modifier.testTag("pricePerKwhInputField")
             )
             ValidatingInputField(
                 updateState = { userInput.feedInTariffs.feedInTariffGrid = it },
                 label = stringResource(Res.string.calculation_params_prices_grid_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffGrid),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                modifier = Modifier.testTag("feedInGridInputField")
             )
         }
 
@@ -193,7 +200,8 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                 updateState = { userInput.feedInTariffs.percentageAmountDeliveryToCommunity = it / 100.0 },
                 label = stringResource(Res.string.calculation_params_prices_community_percent_feed_in),
                 viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity * 100.0),
-                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER
+                supportingText = ERROR_TEXT_WRONG_DECIMAL_NUMBER,
+                modifier = Modifier.testTag("feedInCommunityPercentageInputField")
             )
         }
         var fedInKwh by remember { mutableStateOf("") }
@@ -320,11 +328,18 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
                     barNameFeedInWithBattery) }
             val maxConsumption = forecast.consumptionFromGrid().maxOf { it.value }
             val maxFeedIn = forecast.feedInPerMonth().maxOf { it.value }
-            max(maxConsumption, maxFeedIn).let {
+            val maxValueOfForecast = max(maxConsumption, maxFeedIn)
+
+            val maxOrigConsumption = consumptionFromGrid.maxOf { it.value }
+            val maxOrigFeedIn = fedInToGrid.maxOf { it.value.absoluteValue }
+            val maxValueOfOriginalData = max(maxOrigConsumption, maxOrigFeedIn)
+            max(maxValueOfForecast, maxValueOfOriginalData).let {
                 maxValueConsumption = kotlin.math.ceil(it.times(1.1).div(10.0)).times(10.0)
                 minValueFeedIn = -maxValueConsumption
-            }},
-            modifier = modifier.fillMaxWidth()) {
+            }
+
+            },
+            modifier = modifier.fillMaxWidth().testTag("calculationButton")) {
             Text(stringResource(Res.string.calculation_button_start))
         }
         Text(stringResource(Res.string.calculation_result))
@@ -333,9 +348,9 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             DisplayField(fedInKwh, stringResource(Res.string.calculation_result_feed_in_kwh))
-            DisplayField(usedKwhFromBattery, stringResource(Res.string.calculation_result_consumption_from_battery))
+            DisplayField(usedKwhFromBattery, stringResource(Res.string.calculation_result_consumption_from_battery), Modifier.testTag("usedKwhFromBatteryField"))
             DisplayField(batteryLifecycles, stringResource(Res.string.calculation_result_battery_charging_cycles))
-            DisplayField(savedMoney, stringResource(Res.string.calculation_result_saved_money))
+            DisplayField(value = savedMoney, label = stringResource(Res.string.calculation_result_saved_money), modifier = Modifier.testTag("savedMoneyField"))
             DisplayField(savedMoneyBecauseOfBattery,
                 stringResource(Res.string.calculation_result_saved_money_reason_battery))
             DisplayField(lostMoneyBecauseNotFedId,

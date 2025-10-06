@@ -11,7 +11,7 @@ class JvmLogger(val clazz: Any) : Logger {
     }
 
     override fun debug(message: String) {
-//        println("DEBUG: [$clazz] $message")
+        println("DEBUG: [$clazz] $message")
     }
 
     override fun info(message: String) {
