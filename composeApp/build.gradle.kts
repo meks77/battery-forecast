@@ -30,7 +30,7 @@ kotlin {
             }
             testTask {
                 useKarma {
-                    useFirefox()
+                    useFirefoxHeadless()
                 }
             }
         }
@@ -57,6 +57,8 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
             implementation("io.kotest:kotest-assertions-core:6.0.1")
         }
         jvmMain.dependencies {
