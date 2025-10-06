@@ -2,12 +2,15 @@ package at.meks.pv.forecast.battery.calculation
 
 import at.meks.pv.forecast.battery.calculation.model.PowerData
 import at.meks.pv.forecast.battery.calculation.model.SinglePowerData
+import at.meks.pv.forecast.battery.createLogger
+import at.meks.pv.forecast.battery.minusSeconds
 import kotlinx.datetime.Month
 
 class OriginalPowerDataAggregation(val years: List<Int>) {
 
     private val consumptionFromGrid = mutableMapOf<Month, Double>()
     private val fedInToGrid = mutableMapOf<Month, Double>()
+    private val logger = createLogger(this)
 
     constructor(powerData: PowerData, years: List<Int>) : this(years) {
         Month.entries.forEach { month -> this.consumptionFromGrid[month] = 0.0 }
@@ -16,19 +19,23 @@ class OriginalPowerDataAggregation(val years: List<Int>) {
     }
 
     private fun calculatePowerStatistics(singlePowerData: SinglePowerData) {
-        consumptionFromGrid[singlePowerData.timestampUntil.month] = singlePowerData.consumptionKwh
-        fedInToGrid[singlePowerData.timestampUntil.month] = singlePowerData.feedInKwh
+        val month = singlePowerData.timestampUntil.minusSeconds(1).month
+        consumptionFromGrid[month] = (consumptionFromGrid[month]?:0.0) + singlePowerData.consumptionKwh
+        fedInToGrid[month] = (fedInToGrid[month]?:0.0) + singlePowerData.feedInKwh
+        logger.debug("modified power data by $singlePowerData to $consumptionFromGrid and $fedInToGrid")
     }
 
-    fun consumptionPerMonthAsString(): String {
-        return consumptionFromGrid.entries
-            .joinToString(separator = ", ") { it.value.toString() }
+    fun consumptionPerMonth(): Map<Month, Double> {
+        logger.debug("consumptionFromGrid: $consumptionFromGrid")
+        return consumptionFromGrid.toMap()
     }
 
-    fun fedInPerMonthAsString(): String {
-        return fedInToGrid.entries
-            .map { it.value * -1.0 }
-            .joinToString(separator = ", ") { it.toString() }
+    fun fedInPerMonth(): Map<Month, Double> {
+        logger.debug("fedInPerMonth: $fedInToGrid")
+        val result = mutableMapOf<Month, Double>()
+        fedInToGrid
+            .forEach { entry -> result.put(entry.key, entry.value * -1.0) }
+        return result.toMap()
     }
 
     fun consumptionOfYear(): Double {

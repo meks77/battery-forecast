@@ -18,7 +18,7 @@ class PowerfileImporter {
         logger.info("import file content of type $type")
         val parser = PowerFileParser(fileContent)
         parser.stream().forEach {
-            logger.info("power data: $it")
+            logger.debug("power data: $it")
             currentContext().powerDataRepo().addOrReplace(it.timestamp, it.power, type)
         }
     }

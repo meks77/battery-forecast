@@ -1,4 +1,4 @@
-package at.meks.pv.forecast.battery.calculation
+package at.meks.pv.forecast.battery.calculation.model
 
 /**
  *

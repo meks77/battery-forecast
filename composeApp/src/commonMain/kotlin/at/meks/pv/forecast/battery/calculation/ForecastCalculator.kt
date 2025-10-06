@@ -1,15 +1,16 @@
 package at.meks.pv.forecast.battery.calculation
 
+import at.meks.pv.forecast.battery.PowerDataRepo
+import at.meks.pv.forecast.battery.RuntimeContext
 import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
 import at.meks.pv.forecast.battery.Year
+import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
 import at.meks.pv.forecast.battery.calculation.model.Forecast
 
-//TODO: either use the calculator or remove it completely
-class ForecastCalculator() {
+class ForecastCalculator(val powerDataRepo: PowerDataRepo) {
 
-    private val powerDataRepo = currentContext().powerDataRepo()
 
-    fun calculateForecast(price: Double, capacity: Double, cycles: Int, year: Year?, feedInTariffGrid: Double,
+    fun calculateForecast(price: Double, capacity: Double, cycles: Int, year: Year, feedInTariffGrid: Double,
                           feedInTariffEnergyCommunity: Double, percentageAmountDeliveryToCommunity: Double
     ): Result {
         val yearForCalculation = yearForCalculation(year)

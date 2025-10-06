@@ -1,7 +1,8 @@
 package at.meks.pv.forecast.battery.calculation.model
 
 import at.meks.pv.forecast.battery.Year
-import at.meks.pv.forecast.battery.calculation.FeedInTariffs
+import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
+import at.meks.pv.forecast.battery.createLogger
 import kotlinx.datetime.YearMonth
 
 class Forecast private constructor(
@@ -20,7 +21,8 @@ class Forecast private constructor(
     fun consumptionFromGrid(): Map<YearMonth, Double> {
         val filteredConsumption = photovoltaikSystem.consumptionFromGrid()
             .filter { entry -> entry.key.year == this.year.getValue() }
-        return addMissingMonths(filteredConsumption).toMap()
+        val addMissingMonths = addMissingMonths(filteredConsumption)
+        return addMissingMonths.toMap()
     }
 
     private fun addMissingMonths(

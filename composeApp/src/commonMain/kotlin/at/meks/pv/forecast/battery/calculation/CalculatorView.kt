@@ -20,9 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import at.meks.pv.forecast.battery.Logger
 import at.meks.pv.forecast.battery.RuntimeContext
 import at.meks.pv.forecast.battery.Year
-import at.meks.pv.forecast.battery.calculation.model.Battery
-import at.meks.pv.forecast.battery.calculation.model.Forecast
-import at.meks.pv.forecast.battery.calculation.model.PhotovoltaikSystem
+import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
 import at.meks.pv.forecast.battery.createLogger
 import battery_forecast.composeapp.generated.resources.*
 import ir.ehsannarmani.compose_charts.RowChart
@@ -293,16 +291,12 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
 
         Button(onClick = {
             logger.debug("UserInput: $userInput")
-            val powerData = RuntimeContext.currentContext().powerDataRepo().powerData(Year(userInput.year))
-            val forecast = Forecast(inputPrice = userInput.pricePerKwh,
-                year = Year(userInput.year),
-                maxBatteryCapacityKwh = userInput.batteryCapacity,
-                batteryLifetimeCycles = userInput.batteryCycles,
-                powerData = powerData,
-                feedInTariffs = userInput.feedInTariffs)
-            val photovoltaikSystem = PhotovoltaikSystem(Battery(0.0, 6000))
-            powerData.powerdataForYear(Year(userInput.year)).forEach(photovoltaikSystem::add)
-
+            val calculatonResult =
+                RuntimeContext.currentContext().forecastCalculator().calculateForecast(userInput.pricePerKwh, userInput.batteryCapacity,
+                    userInput.batteryCycles, Year(userInput.year), userInput.feedInTariffs.feedInTariffGrid,
+                    userInput.feedInTariffs.feedInTariffEnergyCommunity,
+                    userInput.feedInTariffs.percentageAmountDeliveryToCommunity)
+            val forecast = calculatonResult.forecast
 
             fedInKwh = forecast.fedInKwh().round(2).toString()
             usedKwhFromBattery = forecast.consumptionFromBatteryKwh().round(2).toString()
@@ -310,18 +304,18 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             savedMoney = forecast.savedMoneyPerYear().round(2).toString()
             savedMoneyBecauseOfBattery = forecast.savedMoneyBecauseOfSavedPower().round(2).toString()
             lostMoneyBecauseNotFedId = forecast.lostFeedInMoney().round(2).toString()
-            val consumptionFromGrid = photovoltaikSystem.consumptionFromGrid()
-            val fedInToGrid = photovoltaikSystem.feedInToGrid()
+            val consumptionFromGrid = calculatonResult.originalPowerDataAggregation.consumptionPerMonth()
+            val fedInToGrid = calculatonResult.originalPowerDataAggregation.fedInPerMonth()
             consumptionBars = forecast.consumptionFromGrid()
                 .entries.sortedBy { entry -> entry.key }
                 .map { entry -> monthBar(monthNames[entry.key.month]!!,
-                    consumptionFromGrid[entry.key]?:0.0, entry.value, ConsumptionOrFeedIn.CONSUMPTION,
+                    consumptionFromGrid[entry.key.month]?:0.0, entry.value, ConsumptionOrFeedIn.CONSUMPTION,
                     barNameConsumptionWithoutBattery,
                     barNameConsumptionWithBattery) }
             feedInBars = forecast.feedInPerMonth()
                 .entries.sortedBy { entry -> entry.key }
                 .map { entry -> monthBar(monthNames[entry.key.month]!!,
-                    fedInToGrid[entry.key]?.times(-1.0)?:0.0, entry.value.times(-1.0), ConsumptionOrFeedIn.FEED_IN,
+                    fedInToGrid[entry.key.month]?:0.0, entry.value.times(-1.0), ConsumptionOrFeedIn.FEED_IN,
                     barNameFeedInWithoutBattery,
                     barNameFeedInWithBattery) }
             val maxConsumption = forecast.consumptionFromGrid().maxOf { it.value }

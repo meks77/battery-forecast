@@ -1,7 +1,7 @@
 package at.meks.pv.forecast.battery.calculation.model
 
 import at.meks.pv.forecast.battery.Year
-import at.meks.pv.forecast.battery.calculation.FeedInTariffs
+import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
 import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.maps.shouldContainExactly
 import kotlinx.datetime.LocalDateTime
