@@ -2,6 +2,7 @@
 androidx-lifecycle = "2.9.4"
 composeMultiplatform = "1.9.0"
 composeHotReload = "1.0.0-rc01"
+composeNavigationVersion = "2.9.0"
 junit = "4.13.2"
 kotlin = "2.2.20"
 kotlinx-date = "0.7.1-0.6.x-compat"
@@ -15,6 +16,7 @@ junit = { module = "junit:junit", version.ref = "junit" }
 kotlinx-date = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-date"}
 androidx-lifecycle-viewmodelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigationVersion"}
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 composeIcons-fontAwesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "composeIcons" }
 
