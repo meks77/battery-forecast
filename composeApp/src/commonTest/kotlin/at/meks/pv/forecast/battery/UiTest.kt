@@ -31,7 +31,7 @@ class UiTest {
         onNodeWithTag("yearInputField").performTextReplacement("2024")
         onNodeWithTag("pricePerKwhInputField").performTextReplacement("0.3")
         onNodeWithTag("feedInGridInputField").performTextReplacement("0.06")
-        onNodeWithTag("batteryCapacityInputField").performTextReplacement("10")
+        onNodeWithTag("batteryCapacityInputField").performTextReplacement("5.0")
         onNodeWithTag("feedInCommunityPercentageInputField").performTextReplacement("0")
 
         RuntimeContext.currentContext().powerDataRepo().addOrReplace(LocalDateTime(2024, 1, 1, 12, 0), 10.0, PowerDataRepo.PowerType.FED_IN)
@@ -39,7 +39,7 @@ class UiTest {
 
 
         onNodeWithTag("calculationButton").performClick()
-        onNodeWithTag("usedKwhFromBatteryField").assert(hasText("10.0"))
-        onNodeWithTag("savedMoneyField").assert(hasText("2.4"))
+        onNodeWithTag("usedKwhFromBatteryField").assert(hasText("5.0"))
+        onNodeWithTag("savedMoneyField").assert(hasText("1.2"))
     }
 }
