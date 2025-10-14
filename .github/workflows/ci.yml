@@ -39,7 +39,7 @@ jobs:
       - name: Build
         id: build
         run: |
-          gradle build
+          gradle build --max-workers=1
 
       - name: Upload static files as artifact
         id: deployment
