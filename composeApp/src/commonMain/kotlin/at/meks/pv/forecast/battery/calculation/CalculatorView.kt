@@ -133,7 +133,7 @@ fun DisplayField(value: String, label: String, modifier: Modifier = Modifier) {
 @Composable
 fun CalculatorScreen(modifier: Modifier = Modifier) {
     val logger: Logger = createLogger("CalculatorScreen")
-    val userInput = UserInput(0.27, 9.0, 6000, 2024, FeedInTariffs(0.06, 0.1, 0.1))
+    var userInput by remember { mutableStateOf(UserInput(0.27, 9.0, 6000, 2024, FeedInTariffs(0.06, 0.1, 0.1))) }
     Column(modifier = modifier.padding(4.dp)) {
 
         Text(stringResource(Res.string.calculation_params))
