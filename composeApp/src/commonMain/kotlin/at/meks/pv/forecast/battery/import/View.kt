@@ -2,6 +2,7 @@ package at.meks.pv.forecast.battery.import
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -94,32 +95,168 @@ fun FileImportButton(fileType: PowerDataRepo.PowerType, afterImport: () -> Unit)
     val fileImporter = PowerfileImporter()
     var isImporting by remember { mutableStateOf(false) }
     var pendingFile by remember { mutableStateOf<io.github.vinceglb.filekit.PlatformFile?>(null) }
-    
+    var showConfig by remember { mutableStateOf(false) }
+    var fileContentState by remember { mutableStateOf<String?>(null) }
+
+    // Read the file content when a file is selected, then show the configuration dialog
     LaunchedEffect(pendingFile) {
         pendingFile?.let { file ->
             isImporting = true
             try {
                 val fileContent = file.readString()
-                // TODO: add a preview of interpreted content
-                // TODO: start import after configuring and confirming
-
-                fileImporter.import(fileContent, fileType)
-                afterImport.invoke()
+                fileContentState = fileContent
+                showConfig = true
             } finally {
                 isImporting = false
                 pendingFile = null
             }
         }
     }
-    
+
+    // File picker
     val filePickerResult = rememberFilePickerLauncher(type = FileKitType.File(listOf("csv"))) {
         if (it != null && !isImporting) {
             pendingFile = it // Store the file object instead of reading it immediately
         }
     }
-    
+
+    // Import configuration dialog
+    if (showConfig && fileContentState != null) {
+        var separator by remember { mutableStateOf(";") }
+        var timestampIndex by remember { mutableStateOf(0) }
+        var powerIndex by remember { mutableStateOf(1) }
+        var hasHeader by remember { mutableStateOf(true) }
+
+        val separatorVm = remember { StringViewModel(1, ";") }
+        val timestampVm = remember { IntViewModel(0) }
+        val powerVm = remember { IntViewModel(1) }
+
+        AlertDialog(
+            onDismissRequest = {
+                showConfig = false
+                fileContentState = null
+            },
+            confirmButton = {
+                val inputsValid = !separatorVm.inputHasErrors && !timestampVm.inputHasErrors && !powerVm.inputHasErrors
+                Button(enabled = inputsValid, onClick = {
+                    val structure = FileContentStructure(
+                        columnSeparator = separator.first(),
+                        colIndexTimestamp = timestampIndex,
+                        colIndexPower = powerIndex,
+                        containsHeader = hasHeader
+                    )
+                    // Do the import now with the provided structure
+                    fileContentState?.let { content ->
+                        isImporting = true
+                        try {
+                            fileImporter.import(content, fileType, structure)
+                            afterImport.invoke()
+                        } finally {
+                            isImporting = false
+                            showConfig = false
+                            fileContentState = null
+                        }
+                    }
+                }) {
+                    Text(stringResource(Res.string.import_config_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showConfig = false
+                    fileContentState = null
+                }) { Text(stringResource(Res.string.import_config_cancel)) }
+            },
+            title = { Text(stringResource(Res.string.import_config_title)) },
+            text = {
+                Column {
+                    // Inputs
+                    FlowRow() {
+                        ValidatingInputField(
+                            label = stringResource(Res.string.import_config_label_separator),
+                            updateState = { value: String -> separator = value },
+                            viewModel = separatorVm,
+                            supportingText = stringResource(Res.string.import_config_support_separator),
+                            modifier = Modifier.width(160.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        ValidatingInputField(
+                            label = stringResource(Res.string.import_config_label_timestamp_index),
+                            updateState = { value: Int -> timestampIndex = value },
+                            viewModel = timestampVm,
+                            supportingText = stringResource(Res.string.import_config_support_index_number),
+                            modifier = Modifier.width(220.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        ValidatingInputField(
+                            label = stringResource(Res.string.import_config_label_power_index),
+                            updateState = { value: Int -> powerIndex = value },
+                            viewModel = powerVm,
+                            supportingText = stringResource(Res.string.import_config_support_index_number),
+                            modifier = Modifier.width(200.dp)
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(checked = hasHeader, onCheckedChange = { hasHeader = it })
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(Res.string.import_config_header_checkbox))
+                    }
+
+                    // Live preview
+                    Spacer(Modifier.height(12.dp))
+                    HorizontalDivider()
+                    Spacer(Modifier.height(8.dp))
+                    Text(stringResource(Res.string.import_config_preview_title), style = MaterialTheme.typography.titleSmall)
+
+                    var previewRows by remember { mutableStateOf<List<PowerLine>>(emptyList()) }
+                    var previewError by remember { mutableStateOf<String?>(null) }
+                    val unknownParsingError = stringResource(Res.string.import_config_preview_unknown_error)
+
+                    LaunchedEffect(fileContentState, separator, timestampIndex, powerIndex, hasHeader) {
+                        val content = fileContentState ?: return@LaunchedEffect
+                        try {
+                            val structurePreview = FileContentStructure(
+                                columnSeparator = separator.first(),
+                                colIndexTimestamp = timestampIndex,
+                                colIndexPower = powerIndex,
+                                containsHeader = hasHeader
+                            )
+                            val parser = PowerFileParser(content, structurePreview)
+                            previewRows = parser.stream().take(5).toList()
+                            previewError = null
+                        } catch (e: Exception) {
+                            previewRows = emptyList()
+                            previewError = e.message ?: unknownParsingError
+                        }
+                    }
+
+                    if (previewError != null) {
+                        Text(previewError!!, color = Color.Red)
+                    } else if (previewRows.isEmpty()) {
+                        Text(stringResource(Res.string.import_config_preview_no_rows))
+                    } else {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+                                Text(stringResource(Res.string.import_config_preview_col_timestamp), modifier = Modifier.weight(1f))
+                                Text(stringResource(Res.string.import_config_preview_col_power), modifier = Modifier.weight(1f), textAlign = TextAlign.Right)
+                            }
+                            HorizontalDivider()
+                            previewRows.forEach { line ->
+                                Row(Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
+                                    Text(line.timestamp.toString(), modifier = Modifier.weight(1f))
+                                    Text(line.power.toString(), modifier = Modifier.weight(1f), textAlign = TextAlign.Right)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    }
+
     Button(
-        modifier = Modifier.padding(10.dp), 
+        modifier = Modifier.padding(10.dp),
         onClick = { filePickerResult.launch() },
         enabled = !isImporting
     ) {
