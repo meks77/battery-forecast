@@ -44,4 +44,20 @@
     <string name="calculation_result_chart_row_label_october">Oct</string>
     <string name="calculation_result_chart_row_label_november">Nov</string>
     <string name="calculation_result_chart_row_label_december">Dec</string>
+
+    <!-- Import configuration dialog -->
+    <string name="import_config_title">Import configuration</string>
+    <string name="import_config_confirm">Import</string>
+    <string name="import_config_cancel">Cancel</string>
+    <string name="import_config_label_separator">Separator</string>
+    <string name="import_config_label_timestamp_index">Timestamp column index</string>
+    <string name="import_config_label_power_index">Power column index</string>
+    <string name="import_config_support_separator">The separator must be a single character</string>
+    <string name="import_config_support_index_number">Index must be a number</string>
+    <string name="import_config_header_checkbox">First line is a header</string>
+    <string name="import_config_preview_title">Preview (first 5 rows)</string>
+    <string name="import_config_preview_no_rows">No data rows detected.</string>
+    <string name="import_config_preview_col_timestamp">Timestamp</string>
+    <string name="import_config_preview_col_power">Power (kWh)</string>
+    <string name="import_config_preview_unknown_error">Unknown parsing error</string>
 </resources>
