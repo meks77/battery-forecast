@@ -29,4 +29,8 @@ image::Screenshot-Webapp.png[]
 * click on "Calculate"
 * verify the result
 
+For detailed instructions on preparing and importing your data (CSV format, columns, separators, examples, and troubleshooting), see:
+
+link:docs/importing-energy-data.adoc[Importing Energy Data]
+
 
