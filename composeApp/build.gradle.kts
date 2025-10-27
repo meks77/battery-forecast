@@ -12,6 +12,7 @@ plugins {
 kotlin {
     jvm()
 
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         outputModuleName.set("composeApp")
@@ -66,9 +67,19 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
+        jvmTest.dependencies {
+            implementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+            runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+            implementation("org.concordion:concordion:4.0.1")
+        }
     }
 }
 
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+    systemProperty("concordion.output.dir", "$reporting.baseDir/spec")
+}
 
 compose.desktop {
     application {
