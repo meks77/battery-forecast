@@ -138,7 +138,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
     val uriHandler = LocalUriHandler.current
     Column(modifier = modifier.padding(4.dp)) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Button(onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blobl/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationDe.md") }, modifier = Modifier.testTag("helpButton")) {
+            Button(onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationDe.md") }, modifier = Modifier.testTag("helpButton")) {
                 Text(stringResource(Res.string.calculation_help_button))
             }
         }

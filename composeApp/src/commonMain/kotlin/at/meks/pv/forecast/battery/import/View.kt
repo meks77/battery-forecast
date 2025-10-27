@@ -41,7 +41,7 @@ fun ImportScreen(modifier : Modifier = Modifier) {
     ) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Button(
-                onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportDe.md") },
+                onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportDe.md") },
                 modifier = Modifier.testTag("helpButton")
             ) {
                 Text(stringResource(Res.string.calculation_help_button))
