@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.input.KeyboardType.Companion.Number
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -134,7 +135,13 @@ fun DisplayField(value: String, label: String, modifier: Modifier = Modifier) {
 fun CalculatorScreen(modifier: Modifier = Modifier) {
     val logger: Logger = createLogger("CalculatorScreen")
     var userInput by remember { mutableStateOf(UserInput(0.27, 9.0, 6000, 2024, FeedInTariffs(0.06, 0.1, 0.1))) }
+    val uriHandler = LocalUriHandler.current
     Column(modifier = modifier.padding(4.dp)) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Button(onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blobl/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationDe.md") }, modifier = Modifier.testTag("helpButton")) {
+                Text(stringResource(Res.string.calculation_help_button))
+            }
+        }
 
         Text(stringResource(Res.string.calculation_params))
         ValidatingInputField(
