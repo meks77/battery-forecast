@@ -60,4 +60,5 @@
     <string name="import_config_preview_col_timestamp">Zeitstempel</string>
     <string name="import_config_preview_col_power">Energie (kWh)</string>
     <string name="import_config_preview_unknown_error">Unbekannter Parser-Fehler</string>
+    <string name="calculation_help_button">Hilfe</string>
 </resources>
