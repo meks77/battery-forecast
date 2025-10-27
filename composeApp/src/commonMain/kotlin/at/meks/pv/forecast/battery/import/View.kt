@@ -8,6 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -33,9 +35,18 @@ enum class ImportScreen {
 @Composable
 fun ImportScreen(modifier : Modifier = Modifier) {
     val navController = rememberNavController()
+    val uriHandler = LocalUriHandler.current
     FlowColumn (
         modifier = Modifier.fillMaxSize().padding(10.dp)
     ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            Button(
+                onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportDe.md") },
+                modifier = Modifier.testTag("helpButton")
+            ) {
+                Text(stringResource(Res.string.calculation_help_button))
+            }
+        }
         NavHost(
             navController = navController,
             startDestination = ImportScreen.ImportSelection.name,
