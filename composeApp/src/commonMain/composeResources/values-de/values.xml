@@ -44,4 +44,21 @@
     <string name="calculation_result_chart_row_label_october">Okt</string>
     <string name="calculation_result_chart_row_label_november">Nov</string>
     <string name="calculation_result_chart_row_label_december">Dez</string>
+
+    <!-- Import configuration dialog -->
+    <string name="import_config_title">Import-Konfiguration</string>
+    <string name="import_config_confirm">Importieren</string>
+    <string name="import_config_cancel">Abbrechen</string>
+    <string name="import_config_label_separator">Trennzeichen</string>
+    <string name="import_config_label_timestamp_index">Spaltenindex Zeitstempel</string>
+    <string name="import_config_label_power_index">Spaltenindex Energiemenge</string>
+    <string name="import_config_support_separator">Das Trennzeichen muss genau ein Zeichen lang sein</string>
+    <string name="import_config_support_index_number">Index muss eine Zahl sein</string>
+    <string name="import_config_header_checkbox">Erste Zeile ist eine Überschrift</string>
+    <string name="import_config_preview_title">Vorschau (erste 5 Zeilen)</string>
+    <string name="import_config_preview_no_rows">Keine Datenzeilen gefunden.</string>
+    <string name="import_config_preview_col_timestamp">Zeitstempel</string>
+    <string name="import_config_preview_col_power">Energie (kWh)</string>
+    <string name="import_config_preview_unknown_error">Unbekannter Parser-Fehler</string>
+    <string name="calculation_help_button">Hilfe</string>
 </resources>
