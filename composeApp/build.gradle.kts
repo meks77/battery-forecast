@@ -68,8 +68,8 @@ kotlin {
             implementation(libs.kotlinx.coroutinesSwing)
         }
         jvmTest.dependencies {
-            implementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
-            runtimeOnly("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+            implementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
+            runtimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.1")
             implementation("org.concordion:concordion:4.0.1")
         }
     }
