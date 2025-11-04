@@ -137,8 +137,12 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
     var userInput by remember { mutableStateOf(UserInput(0.27, 9.0, 6000, 2024, FeedInTariffs(0.06, 0.1, 0.1))) }
     val uriHandler = LocalUriHandler.current
     Column(modifier = modifier.padding(4.dp)) {
+        val calculationHelpLink = stringResource(Res.string.calculation_help_link)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Button(onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationDe.md") }, modifier = Modifier.testTag("helpButton")) {
+            Button(
+                onClick = { uriHandler.openUri(calculationHelpLink) },
+                modifier = Modifier.testTag("helpButton")
+            ) {
                 Text(stringResource(Res.string.calculation_help_button))
             }
         }

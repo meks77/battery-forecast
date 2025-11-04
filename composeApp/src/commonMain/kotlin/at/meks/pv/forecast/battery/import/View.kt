@@ -28,7 +28,6 @@ import kotlin.uuid.Uuid
 
 enum class ImportScreen {
     ImportSelection,
-    ImportConfiguration,
     ImportSuccessfull
 }
 
@@ -39,9 +38,10 @@ fun ImportScreen(modifier : Modifier = Modifier) {
     FlowColumn (
         modifier = Modifier.fillMaxSize().padding(10.dp)
     ) {
+        val importHelpLink = stringResource(Res.string.import_help_link)
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Button(
-                onClick = { uriHandler.openUri("https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportDe.md") },
+                onClick = { uriHandler.openUri(importHelpLink) },
                 modifier = Modifier.testTag("helpButton")
             ) {
                 Text(stringResource(Res.string.calculation_help_button))
@@ -54,7 +54,7 @@ fun ImportScreen(modifier : Modifier = Modifier) {
                 .fillMaxSize()
         ) {
             composable(ImportScreen.ImportSelection.name) {
-                ImportSelectionScreen(onClickNext = { navController.navigate(ImportScreen.ImportSuccessfull.name)}) }
+                ImportSelectionScreen(onClickNext = { navController.navigate(ImportScreen.ImportSuccessfull.name) }) }
             composable(ImportScreen.ImportSuccessfull.name) {
                 ImportSuccessfullScreen(onContinue = { navController.navigate(ImportScreen.ImportSelection.name) })
             }
@@ -77,7 +77,7 @@ fun ImportSelectionScreen(modifier : Modifier = Modifier, onClickNext: () -> Uni
                 Text(stringResource(Res.string.imported_power_entries, powerDataValuesCount.value))
             }
         },
-            modifier = Modifier.padding(10.dp).fillMaxSize().align(Alignment.CenterHorizontally)
+            modifier = Modifier.padding(10.dp)
         ) {
             FlowRow(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Center) {
                 FileImportButton(PowerDataRepo.PowerType.CONSUMPTION,

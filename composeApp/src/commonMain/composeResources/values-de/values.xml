@@ -61,4 +61,8 @@
     <string name="import_config_preview_col_power">Energie (kWh)</string>
     <string name="import_config_preview_unknown_error">Unbekannter Parser-Fehler</string>
     <string name="calculation_help_button">Hilfe</string>
+
+    <!-- Help-Links (lokalisiert) -->
+    <string name="calculation_help_link">https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationDe.md</string>
+    <string name="import_help_link">https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportDe.md</string>
 </resources>

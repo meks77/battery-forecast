@@ -61,4 +61,8 @@
     <string name="import_config_preview_col_power">Power (kWh)</string>
     <string name="import_config_preview_unknown_error">Unknown parsing error</string>
     <string name="calculation_help_button">Help</string>
+
+    <!-- Help links (localized) -->
+    <string name="calculation_help_link">https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/CalculationEn.md</string>
+    <string name="import_help_link">https://github.com/meks77/battery-forecast/blob/main/composeApp/src/jvmTest/resources/at/meks/pv/forecast/battery/specs/ImportEn.md</string>
 </resources>
