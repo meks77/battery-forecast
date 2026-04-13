@@ -61,7 +61,7 @@ kotlin {
             implementation(libs.kotlin.test)
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)
-            implementation("io.kotest:kotest-assertions-core:6.0.7")
+            implementation("io.kotest:kotest-assertions-core:6.1.11")
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
