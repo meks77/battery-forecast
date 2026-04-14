@@ -53,7 +53,7 @@ kotlin {
             implementation(libs.composeNavigation)
             implementation(libs.composeIcons.fontAwesome)
             implementation("io.github.vinceglb:filekit-dialogs-compose:0.12.0")
-            implementation ("io.github.ehsannarmani:compose-charts:0.2.0")
+            implementation ("io.github.ehsannarmani:compose-charts:0.2.5")
             implementation(libs.kotlinx.date)
             implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.8.2")
         }
