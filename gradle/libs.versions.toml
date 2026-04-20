@@ -1,11 +1,11 @@
 [versions]
-androidx-lifecycle = "2.10.0"
-composeMultiplatform = "1.9.3"
+androidx-lifecycle = "2.8.4"
+composeMultiplatform = "1.10.3"
 composeHotReload = "1.1.0-alpha03"
 composeNavigationVersion = "2.9.2"
 junit = "4.13.2"
 kotlin = "2.3.20"
-kotlinx-date = "0.7.1-0.6.x-compat"
+kotlinx-date = "0.7.1"
 kotlinx-coroutines = "1.10.2"
 composeIcons = "1.1.1"
 

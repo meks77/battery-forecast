@@ -22,11 +22,9 @@ kotlin {
             commonWebpackConfig {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
+                    // Serve sources to debug inside browser
+                    static(rootDirPath)
+                    static(projectDirPath)
                 }
             }
             testTask {
@@ -52,10 +50,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.composeNavigation)
             implementation(libs.composeIcons.fontAwesome)
-            implementation("io.github.vinceglb:filekit-dialogs-compose:0.12.0")
+            implementation("io.github.vinceglb:filekit-dialogs-compose:0.10.0")
             implementation ("io.github.ehsannarmani:compose-charts:0.2.5")
             implementation(libs.kotlinx.date)
-            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.8.2")
+            implementation("org.jetbrains.kotlinx:kotlinx-io-core:0.6.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
