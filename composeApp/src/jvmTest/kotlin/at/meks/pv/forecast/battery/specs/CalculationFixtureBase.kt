@@ -36,7 +36,7 @@ abstract class CalculationFixtureBase {
                           prozentZurGemeinschaft: Double) {
         val pd = PowerData(powerDataList.toList())
         forecast = Forecast(preisProKwh, Year(year.toInt()), kapazitaetKwh, 6000, pd,
-            FeedInTariffs(einspeisetarifNetz, einspeisetarifGemeinschaft, prozentZurGemeinschaft))
+            FeedInTariffs(einspeisetarifNetz, einspeisetarifGemeinschaft, prozentZurGemeinschaft/100))
     }
 
     fun consumptionFromGrid(): Double = forecast().consumptionKwh()

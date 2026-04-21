@@ -206,7 +206,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier) {
             ValidatingInputField(
                 updateState = { userInput.feedInTariffs.percentageAmountDeliveryToCommunity = it / 100.0 },
                 label = stringResource(Res.string.calculation_params_prices_community_percent_feed_in),
-                viewModel = DoubleViewModel(userInput.feedInTariffs.feedInTariffEnergyCommunity * 100.0),
+                viewModel = DoubleViewModel(userInput.feedInTariffs.percentageAmountDeliveryToCommunity * 100.0),
                 supportingText = stringResource(Res.string.calculation_params_error_wrong_decimal_number),
                 modifier = Modifier.testTag("feedInCommunityPercentageInputField")
             )

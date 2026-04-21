@@ -34,7 +34,7 @@ Wenn die Prognose für das Jahr [2024][calculatedYear] mit
 * Batteriekapazität [5.0][batteryCapacity] kWh
 * Einspeisetarif Netz [0.08][feedInPriceGrid] €/kWh 
 * Tarif der Energiegemeinschaft [0.15][feedInPriceCommunity] €/kWh 
-* [0][deliveryToCommunityPercent] % Lieferung an die Gemeinschaft.
+* [10][deliveryToCommunityPercent] % Lieferung an die Gemeinschaft.
 
 [calculatedYear]: - "#calculatedYear"
 [consumptionPrice]: - "#consumptionPrice"
@@ -55,7 +55,10 @@ dann ergibt das folgendes Ergebnis:
 
 ## Geld-Ergebnisse
 
-- Entgangene Einspeisevergütung (€) = 4,0 kWh(aus Batterie bezogen) × 0,08 €/kWh (Einspeisetarif Netz) (0%
-  Gemeinschaft): [0.32](- "?=lostMoneyNotFedIn()")
-- Gespartes Geld pro Jahr (€) = 0,3 (Strompreis) × 4,0 (kWh aus Batterie) − 0,32 (entgangene
-  Einspeisevergütung): [0.88](- "?=savedMoney()")
+- Entgangene Einspeisevergütung (€)
+  - 4,0 kWh(aus Batterie bezogen) 
+  - 10 % wären an Community geliefert worden
+  - 3,6 kWh(an Netzbetreiber) × 0,08 €/kWh (Einspeisetarif Netz) = 0,288
+  - 0,4 kWh(an Gemeinschaft)  x 0,15 €/kWh (Einspeisetarif Gemeinschaft) = 0,06 
+  - 0,288 + 0,06: [0.35](- "?=lostMoneyNotFedIn()")
+- Gespartes Geld pro Jahr (€) = 0,3 (Strompreis) × 4,0 (kWh aus Batterie) − 0,35 (entgangene Einspeisevergütung): [0.85](- "?=savedMoney()")

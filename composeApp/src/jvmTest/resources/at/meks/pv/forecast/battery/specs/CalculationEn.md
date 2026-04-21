@@ -36,7 +36,7 @@ When the forecast for the year [2024][calculatedYear] is calculated with
 * Battery capacity [5.0][batteryCapacity] kWh
 * Grid feed-in tariff [0.08][feedInPriceGrid] €/kWh
 * Energy community tariff [0.15][feedInPriceCommunity] €/kWh
-* [0][deliveryToCommunityPercent] % delivery to the community.
+* [10][deliveryToCommunityPercent] % delivery to the community.
 
 [calculatedYear]: - "#calculatedYear"
 [consumptionPrice]: - "#consumptionPrice"
@@ -57,7 +57,11 @@ then the following result is obtained:
 
 ## Money results
 
-- Lost feed-in remuneration (€) = 4.0 kWh (consumed from battery) × 0.08 €/kWh (grid feed-in tariff) (0%
-  community): [0.32](- "?=lostMoneyNotFedIn()")
-- Saved money per year (€) = 0.3 (electricity price) × 4.0 (kWh from battery) − 0.32 (lost feed-in
-  remuneration): [0.88](- "?=savedMoney()")
+- Lost feed-in remuneration (€) 
+  - 4.0 kWh (consumed from battery) 
+  - 10 % would have been delivered to the community
+  - 3,6 kWh (to the grid) × 0.08 €/kWh (grid feed-in tariff)
+  - 0,4 kWH (to the community) x 0.15  (community feed-in tariff)
+  - 0.288 + 0.06: [0.35](- "?=lostMoneyNotFedIn()")
+- Saved money per year (€) = 0.3 (electricity price) × 4.0 (kWh from battery) − 0.35 (lost feed-in
+  remuneration): [0.85](- "?=savedMoney()")
