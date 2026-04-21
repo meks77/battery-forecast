@@ -1,11 +1,10 @@
 package at.meks.pv.forecast.battery.calculation
 
 import at.meks.pv.forecast.battery.PowerDataRepo
-import at.meks.pv.forecast.battery.RuntimeContext
-import at.meks.pv.forecast.battery.RuntimeContext.Companion.currentContext
 import at.meks.pv.forecast.battery.Year
 import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
 import at.meks.pv.forecast.battery.calculation.model.Forecast
+import at.meks.pv.forecast.battery.createLogger
 
 class ForecastCalculator(val powerDataRepo: PowerDataRepo) {
 
@@ -16,13 +15,14 @@ class ForecastCalculator(val powerDataRepo: PowerDataRepo) {
         val yearForCalculation = yearForCalculation(year)
         val powerData = powerDataRepo.powerData(yearForCalculation)
         val feedInTariffs =
-            FeedInTariffs(feedInTariffGrid, feedInTariffEnergyCommunity, percentageAmountDeliveryToCommunity / 100.0)
+            FeedInTariffs(feedInTariffGrid, feedInTariffEnergyCommunity, percentageAmountDeliveryToCommunity)
 
         val forecast = Forecast(price, yearForCalculation, capacity, cycles, powerData, feedInTariffs)
 
         val originalPowerdataAggregation = OriginalPowerDataAggregation(powerData, powerDataRepo.years())
         val userInputfeedInTariffs =
             feedInTariffs.copy(percentageAmountDeliveryToCommunity = percentageAmountDeliveryToCommunity)
+        createLogger("ForecastCalculator").debug("DelToCommunity: $percentageAmountDeliveryToCommunity, ${feedInTariffs.percentageAmountDeliveryToCommunity}, ${userInputfeedInTariffs.percentageAmountDeliveryToCommunity}")
         val userInput = UserInput(price, capacity, cycles, yearForCalculation.getValue(), userInputfeedInTariffs)
         return Result(forecast, originalPowerdataAggregation, userInput)
     }

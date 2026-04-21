@@ -1,8 +1,7 @@
 package at.meks.pv.forecast.battery.calculation.model
 
 import at.meks.pv.forecast.battery.Year
-import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
-import at.meks.pv.forecast.battery.createLogger
+import at.meks.pv.forecast.battery.calculation.round
 import kotlinx.datetime.YearMonth
 
 class Forecast private constructor(
@@ -70,8 +69,8 @@ class Forecast private constructor(
     }
 
     fun lostFeedInMoney(): Double {
-        return consumptionFromBatteryKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity) * feedInTariffs.feedInTariffGrid +
-                consumptionFromBatteryKwh() * feedInTariffs.percentageAmountDeliveryToCommunity * feedInTariffs.feedInTariffEnergyCommunity
+        return (consumptionFromBatteryKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity) * feedInTariffs.feedInTariffGrid +
+                consumptionFromBatteryKwh() * feedInTariffs.percentageAmountDeliveryToCommunity * feedInTariffs.feedInTariffEnergyCommunity).round(2)
     }
 
     fun fedInKwhToEnergyPurchaseAgreementPartner(): Double {

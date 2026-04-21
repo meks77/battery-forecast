@@ -1,7 +1,6 @@
 package at.meks.pv.forecast.battery.calculation.model
 
 import at.meks.pv.forecast.battery.Year
-import at.meks.pv.forecast.battery.calculation.model.FeedInTariffs
 import io.kotest.matchers.doubles.shouldBeExactly
 import io.kotest.matchers.maps.shouldContainExactly
 import kotlinx.datetime.LocalDateTime
@@ -153,10 +152,11 @@ class ForecastTest {
     fun testLostFeedInMoney() {
         val forecast = createForecast()
         val result = forecast.lostFeedInMoney()
-        
-        val expectedLostMoney = forecast.consumptionFromBatteryKwh() * (1.0 - feedInTariffs.percentageAmountDeliveryToCommunity) * feedInTariffs.feedInTariffGrid +
-                forecast.consumptionFromBatteryKwh() * feedInTariffs.percentageAmountDeliveryToCommunity * feedInTariffs.feedInTariffEnergyCommunity
-        result.shouldBeExactly(expectedLostMoney)
+        // 295 kwh from battery
+        // 70 % to power grid with 8 cent = 16.52 Euro
+        // 30 % to community with 12 cent = 10.62 Euro
+        // expected result: 16.52 + 10.62 = 27.14
+        result.shouldBeExactly(27.14)
     }
 
     @Test
